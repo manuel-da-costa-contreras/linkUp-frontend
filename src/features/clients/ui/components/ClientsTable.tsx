@@ -3,6 +3,7 @@
 import { FormEvent, useMemo, useState } from "react";
 import { Card, Loader, Modal, SectionHeading, TablePagination, TableSortHeader } from "@/components/ui";
 import { useI18n } from "@/i18n/I18nProvider";
+import { useAuth } from "@/lib/auth";
 import type { Client } from "../../domain/entities/Client";
 import type { ClientSortBy } from "../../domain/repositories/ClientRepository";
 import { useClients } from "../hooks/useClients";
@@ -13,6 +14,7 @@ type ClientsTableProps = {
 
 export function ClientsTable({ orgId }: ClientsTableProps) {
   const { t } = useI18n();
+  const { canManageClients } = useAuth();
   const {
     search,
     setSearch,
@@ -137,13 +139,15 @@ export function ClientsTable({ orgId }: ClientsTableProps) {
               value={search}
               onChange={(event) => setSearch(event.target.value)}
               placeholder={t("clients.search.placeholder")}
-              className="h-10 w-full rounded-lg border border-zinc-200 bg-white px-3 text-sm text-zinc-800 outline-none transition-colors focus:border-cyan-500"
+              className="h-10 w-full rounded-lg border border-neutral-200 bg-white px-3 text-sm text-neutral-800 outline-none transition-colors focus:border-primary-500 focus-visible:ring-2 focus-visible:ring-primary-200"
             />
           </div>
           <button
             type="button"
+            disabled={!canManageClients}
             onClick={() => setAddModalOpen(true)}
-            className="h-10 rounded-lg bg-cyan-600 px-4 text-sm font-medium text-white transition-colors hover:bg-cyan-700"
+            title={!canManageClients ? t("auth.errors.forbiddenMutation") : undefined}
+            className="h-10 rounded-lg bg-primary-600 px-4 text-sm font-medium text-white transition-colors hover:bg-primary-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200 disabled:cursor-not-allowed disabled:bg-neutral-300 disabled:text-neutral-600"
           >
             {t("clients.actions.add")}
           </button>
@@ -158,7 +162,7 @@ export function ClientsTable({ orgId }: ClientsTableProps) {
             <div className="overflow-x-auto">
               <table className="w-full min-w-[760px] border-collapse text-sm">
                 <thead>
-                  <tr className="border-b border-zinc-200 text-left text-zinc-500">
+                  <tr className="border-b border-neutral-200 text-left text-neutral-500">
                     <th className="py-3 pr-3 font-medium">{renderSortHeader(t("clients.table.column.name"), "name")}</th>
                     <th className="py-3 px-3 font-medium">{renderSortHeader(t("clients.table.column.totalJobs"), "totalJobs")}</th>
                     <th className="py-3 px-3 font-medium">{renderSortHeader(t("clients.table.column.pending"), "pendingJobs")}</th>
@@ -173,15 +177,19 @@ export function ClientsTable({ orgId }: ClientsTableProps) {
                 </thead>
                 <tbody>
                   {clients.map((client) => (
-                    <tr key={client.id} className="border-b border-zinc-100 text-zinc-700 last:border-b-0">
-                      <td className="py-3 pr-3 font-medium text-cyan-700">
-                        <button
-                          type="button"
-                          onClick={() => openEditModal(client)}
-                          className="rounded px-1 py-0.5 text-left underline-offset-2 hover:underline"
-                        >
-                          {client.name}
-                        </button>
+                    <tr key={client.id} className="border-b border-neutral-100 text-neutral-700 last:border-b-0">
+                      <td className="py-3 pr-3 font-medium text-primary-700">
+                        {canManageClients ? (
+                          <button
+                            type="button"
+                            onClick={() => openEditModal(client)}
+                            className="rounded px-1 py-0.5 text-left underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200"
+                          >
+                            {client.name}
+                          </button>
+                        ) : (
+                          <span className="px-1 py-0.5 text-neutral-900">{client.name}</span>
+                        )}
                       </td>
                       <td className="py-3 px-3">{client.totalJobs}</td>
                       <td className="py-3 px-3">{client.pendingJobs}</td>
@@ -191,10 +199,10 @@ export function ClientsTable({ orgId }: ClientsTableProps) {
                         <button
                           type="button"
                           onClick={() => handleDelete(client.id)}
-                          disabled={deletingClientId === client.id}
-                          title={t("clients.tooltip.delete")}
+                          disabled={deletingClientId === client.id || !canManageClients}
+                          title={!canManageClients ? t("auth.errors.forbiddenMutation") : t("clients.tooltip.delete")}
                           aria-label={t("clients.tooltip.delete")}
-                          className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-zinc-500 transition-colors hover:bg-red-50 hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-60"
+                          className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-neutral-500 transition-colors hover:bg-red-50 hover:text-red-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200 disabled:cursor-not-allowed disabled:bg-neutral-100 disabled:text-neutral-400"
                         >
                           <svg
                             aria-hidden="true"
@@ -218,7 +226,7 @@ export function ClientsTable({ orgId }: ClientsTableProps) {
                   ))}
                 </tbody>
               </table>
-              {clients.length === 0 ? <p className="py-4 text-sm text-zinc-500">{t("clients.table.empty")}</p> : null}
+              {clients.length === 0 ? <p className="py-4 text-sm text-neutral-500">{t("clients.table.empty")}</p> : null}
               {deleteError ? <p className="pt-2 text-xs text-red-700">{deleteError}</p> : null}
             </div>
 
@@ -242,7 +250,7 @@ export function ClientsTable({ orgId }: ClientsTableProps) {
             <button
               type="button"
               onClick={handleCloseAddModal}
-              className="rounded-lg border border-zinc-200 px-4 py-2 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-100"
+               className="rounded-lg border border-neutral-200 px-4 py-2 text-sm font-medium text-neutral-700 transition-colors hover:bg-neutral-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200"
             >
               {t("common.actions.cancel")}
             </button>
@@ -250,7 +258,7 @@ export function ClientsTable({ orgId }: ClientsTableProps) {
               type="submit"
               form="create-client-form"
               disabled={!canSubmit}
-              className="rounded-lg bg-cyan-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-cyan-700 disabled:cursor-not-allowed disabled:opacity-60"
+               className="rounded-lg bg-primary-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200 disabled:cursor-not-allowed disabled:opacity-60"
             >
               {creating ? t("clients.modal.status.creating") : t("common.actions.accept")}
             </button>
@@ -258,7 +266,7 @@ export function ClientsTable({ orgId }: ClientsTableProps) {
         }
       >
         <form id="create-client-form" onSubmit={handleCreateSubmit} className="space-y-3">
-          <label className="block text-sm font-medium text-zinc-700" htmlFor="client-name-input">
+          <label className="block text-sm font-medium text-neutral-700" htmlFor="client-name-input">
             {t("clients.modal.field.name")}
           </label>
           <input
@@ -271,7 +279,7 @@ export function ClientsTable({ orgId }: ClientsTableProps) {
               }
             }}
             placeholder={t("clients.modal.field.placeholder")}
-            className="h-10 w-full rounded-lg border border-zinc-200 px-3 text-sm text-zinc-800 outline-none transition-colors focus:border-cyan-500"
+            className="h-10 w-full rounded-lg border border-neutral-200 px-3 text-sm text-neutral-800 outline-none transition-colors focus:border-primary-500 focus-visible:ring-2 focus-visible:ring-primary-200"
           />
           {nameError ? <p className="text-xs text-red-700">{nameError}</p> : null}
           {createError ? <p className="text-xs text-red-700">{createError}</p> : null}
@@ -287,7 +295,7 @@ export function ClientsTable({ orgId }: ClientsTableProps) {
             <button
               type="button"
               onClick={handleCloseEditModal}
-              className="rounded-lg border border-zinc-200 px-4 py-2 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-100"
+              className="rounded-lg border border-neutral-200 px-4 py-2 text-sm font-medium text-neutral-700 transition-colors hover:bg-neutral-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200"
             >
               {t("common.actions.cancel")}
             </button>
@@ -295,7 +303,7 @@ export function ClientsTable({ orgId }: ClientsTableProps) {
               type="submit"
               form="edit-client-form"
               disabled={!canEditSubmit}
-              className="rounded-lg bg-cyan-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-cyan-700 disabled:cursor-not-allowed disabled:opacity-60"
+              className="rounded-lg bg-primary-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200 disabled:cursor-not-allowed disabled:opacity-60"
             >
               {editing ? t("clients.modal.status.saving") : t("common.actions.accept")}
             </button>
@@ -303,7 +311,7 @@ export function ClientsTable({ orgId }: ClientsTableProps) {
         }
       >
         <form id="edit-client-form" onSubmit={handleEditSubmit} className="space-y-3">
-          <label className="block text-sm font-medium text-zinc-700" htmlFor="edit-client-name-input">
+          <label className="block text-sm font-medium text-neutral-700" htmlFor="edit-client-name-input">
             {t("clients.modal.field.name")}
           </label>
           <input
@@ -316,7 +324,7 @@ export function ClientsTable({ orgId }: ClientsTableProps) {
               }
             }}
             placeholder={t("clients.modal.field.placeholder")}
-            className="h-10 w-full rounded-lg border border-zinc-200 px-3 text-sm text-zinc-800 outline-none transition-colors focus:border-cyan-500"
+            className="h-10 w-full rounded-lg border border-neutral-200 px-3 text-sm text-neutral-800 outline-none transition-colors focus:border-primary-500 focus-visible:ring-2 focus-visible:ring-primary-200"
           />
           {editNameError ? <p className="text-xs text-red-700">{editNameError}</p> : null}
           {editError ? <p className="text-xs text-red-700">{editError}</p> : null}
@@ -325,4 +333,5 @@ export function ClientsTable({ orgId }: ClientsTableProps) {
     </div>
   );
 }
+
 

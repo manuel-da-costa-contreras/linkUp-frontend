@@ -97,7 +97,7 @@ export function JobStatusTransitionModal({
           <button
             type="button"
             onClick={handleClose}
-            className="rounded-lg border border-zinc-200 px-4 py-2 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-100"
+            className="rounded-lg border border-neutral-200 px-4 py-2 text-sm font-medium text-neutral-700 transition-colors hover:bg-neutral-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200"
           >
             {t("common.actions.cancel")}
           </button>
@@ -105,7 +105,7 @@ export function JobStatusTransitionModal({
             type="submit"
             form="job-status-transition-form"
             disabled={loading}
-            className="rounded-lg bg-cyan-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-cyan-700 disabled:cursor-not-allowed disabled:opacity-60"
+            className="rounded-lg bg-primary-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {submitLabel}
           </button>
@@ -113,7 +113,7 @@ export function JobStatusTransitionModal({
       }
     >
       <form id="job-status-transition-form" onSubmit={handleSubmit} className="space-y-3">
-        <label className="block text-sm font-medium text-zinc-700" htmlFor="job-next-status-select">
+        <label className="block text-sm font-medium text-neutral-700" htmlFor="job-next-status-select">
           {t("jobs.modal.transition.field.nextStatus")}
         </label>
         <select
@@ -126,7 +126,7 @@ export function JobStatusTransitionModal({
               setRatingError(null);
             }
           }}
-          className="h-10 w-full rounded-lg border border-zinc-200 px-3 text-sm text-zinc-800 outline-none transition-colors focus:border-cyan-500"
+          className="h-10 w-full rounded-lg border border-neutral-200 px-3 text-sm text-neutral-800 outline-none transition-colors focus:border-primary-500 focus-visible:ring-2 focus-visible:ring-primary-200"
         >
           {options.map((status) => (
             <option key={status} value={status}>
@@ -143,7 +143,7 @@ export function JobStatusTransitionModal({
 
         {nextStatus !== "IN_PROGRESS" ? (
           <>
-            <label className="block text-sm font-medium text-zinc-700" htmlFor="job-transition-reason">
+            <label className="block text-sm font-medium text-neutral-700" htmlFor="job-transition-reason">
               {reasonLabel}
             </label>
             <textarea
@@ -157,7 +157,7 @@ export function JobStatusTransitionModal({
                   ? t("jobs.modal.transition.field.reasonPlaceholderCompleted")
                   : t("jobs.modal.transition.field.reasonPlaceholder")
               }
-              className="w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm text-zinc-800 outline-none transition-colors focus:border-cyan-500"
+              className="w-full rounded-lg border border-neutral-200 px-3 py-2 text-sm text-neutral-800 outline-none transition-colors focus:border-primary-500 focus-visible:ring-2 focus-visible:ring-primary-200"
             />
           </>
         ) : null}
@@ -175,10 +175,11 @@ export function JobStatusTransitionModal({
               label={t("jobs.modal.transition.field.rating")}
             />
             {ratingError ? <p className="text-xs text-red-700">{ratingError}</p> : null}
-            <p className="text-xs text-zinc-500">{t("jobs.modal.transition.helper")}</p>
+            <p className="text-xs text-neutral-500">{t("jobs.modal.transition.helper")}</p>
           </>
         ) : null}
       </form>
     </Modal>
   );
 }
+

@@ -32,11 +32,11 @@ export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
     <>
       <aside
         className={cn(
-          "fixed inset-y-16 left-0 z-20 w-72 border-r border-zinc-200 bg-white p-4 transition-transform lg:static lg:inset-auto lg:translate-x-0 lg:shrink-0",
+          "fixed inset-y-16 left-0 z-20 w-72 border-r border-neutral-200 bg-white p-4 transition-transform lg:static lg:inset-auto lg:translate-x-0 lg:shrink-0",
           mobileOpen ? "translate-x-0" : "-translate-x-full"
         )}
       >
-        <p className="px-3 text-xs font-semibold uppercase tracking-[0.14em] text-zinc-400">
+        <p className="px-3 text-xs font-semibold uppercase tracking-[0.14em] text-neutral-400">
           {t("navigation.sidebar.title")}
         </p>
         <nav className="mt-3 space-y-1">
@@ -50,10 +50,10 @@ export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
                 href={item.href}
                 onClick={onClose}
                 className={cn(
-                  "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors",
+                  "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200",
                   active
-                    ? "bg-cyan-500/10 font-semibold text-cyan-700"
-                    : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-800"
+                    ? "bg-primary-100 font-semibold text-primary-800"
+                    : "text-neutral-600 hover:bg-neutral-100 hover:text-neutral-800"
                 )}
               >
                 <Icon />
@@ -69,7 +69,7 @@ export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
           type="button"
           aria-label={t("navigation.sidebar.closeMenu")}
           onClick={onClose}
-          className="fixed inset-0 top-16 z-10 bg-zinc-950/40 lg:hidden"
+          className="fixed inset-0 top-16 z-10 bg-neutral-900/40 lg:hidden"
         />
       ) : null}
     </>

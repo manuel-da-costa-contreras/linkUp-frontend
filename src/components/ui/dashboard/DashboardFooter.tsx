@@ -9,13 +9,13 @@ export function DashboardFooter() {
   const { t } = useI18n();
 
   return (
-    <footer className="border-t border-zinc-200 bg-[#f5f8ff] px-4 py-4">
+    <footer className="border-t border-neutral-200 bg-neutral-100 px-4 py-4">
       <div className="flex w-full items-center justify-center gap-3">
         <a
           href={linkedinUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-sm font-medium text-cyan-700 underline-offset-4 transition-colors hover:text-cyan-800 hover:underline"
+          className="text-sm font-medium text-primary-700 underline-offset-4 transition-colors hover:text-primary-800 hover:underline"
         >
           {t("navigation.footer.linkedin")}
         </a>
@@ -23,7 +23,7 @@ export function DashboardFooter() {
           href={githubUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-sm font-medium text-cyan-700 underline-offset-4 transition-colors hover:text-cyan-800 hover:underline"
+          className="text-sm font-medium text-primary-700 underline-offset-4 transition-colors hover:text-primary-800 hover:underline"
         >
           {t("navigation.footer.github")}
         </a>

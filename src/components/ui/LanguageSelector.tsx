@@ -28,7 +28,7 @@ export function LanguageSelector({ value, options, label, onChange }: LanguageSe
         id="language-selector"
         value={value}
         onChange={handleChange}
-        className="h-10 rounded-lg border border-zinc-200 bg-white px-3 text-sm font-medium text-zinc-700 outline-none transition-colors hover:border-zinc-300 focus:border-cyan-500"
+        className="h-10 rounded-lg border border-neutral-200 bg-white px-3 text-sm font-medium text-neutral-700 outline-none transition-colors hover:border-neutral-300 focus:border-primary-500 focus-visible:ring-2 focus-visible:ring-primary-200"
         aria-label={label}
       >
         {options.map((option) => (

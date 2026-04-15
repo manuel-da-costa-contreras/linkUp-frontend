@@ -26,18 +26,19 @@ export function Loader({
       role="status"
       aria-live="polite"
       className={cn(
-        "inline-flex items-center gap-3 text-sm text-zinc-600",
+        "inline-flex items-center gap-3 text-sm text-neutral-600",
         centered && "w-full justify-center",
         className
       )}
     >
       <span
         aria-hidden="true"
-        className={cn("relative rounded-full border-zinc-200", sizeStyles[size])}
+        className={cn("relative rounded-full border-neutral-200", sizeStyles[size])}
       >
-        <span className="absolute inset-px rounded-full border-inherit border-t-cyan-600 animate-spin" />
+        <span className="absolute inset-px rounded-full border-inherit border-t-primary-600 animate-spin" />
       </span>
       {label ? <span>{label}</span> : null}
     </div>
   );
 }
+

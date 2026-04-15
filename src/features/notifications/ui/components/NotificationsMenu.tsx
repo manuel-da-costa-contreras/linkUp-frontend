@@ -1,9 +1,10 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { Loader } from "@/components/ui";
 import { useI18n } from "@/i18n/I18nProvider";
+import { useAuth } from "@/lib/auth";
 import { useNotifications } from "../hooks/useNotifications";
 
 type NotificationsMenuProps = {
@@ -12,6 +13,7 @@ type NotificationsMenuProps = {
 
 export function NotificationsMenu({ orgId }: NotificationsMenuProps) {
   const { t } = useI18n();
+  const { canMutateOrgData } = useAuth();
   const {
     notifications,
     loading,
@@ -49,7 +51,7 @@ export function NotificationsMenu({ orgId }: NotificationsMenuProps) {
       <button
         type="button"
         onClick={() => setOpen((prev) => !prev)}
-        className="relative grid h-10 w-10 place-content-center rounded-xl border border-zinc-200 bg-white text-zinc-600 hover:border-zinc-300"
+        className="relative grid h-10 w-10 place-content-center rounded-xl border border-neutral-200 bg-white text-neutral-600 transition-colors hover:border-neutral-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200"
         aria-label={t("navigation.topbar.alerts")}
       >
         {visibleCount > 0 ? <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-rose-500" /> : null}
@@ -70,21 +72,21 @@ export function NotificationsMenu({ orgId }: NotificationsMenuProps) {
       </button>
 
       {open ? (
-        <div className="absolute right-0 z-40 mt-2 w-80 rounded-xl border border-zinc-200 bg-white p-3 shadow-lg">
+        <div className="absolute right-0 z-40 mt-2 w-80 rounded-xl border border-neutral-200 bg-white p-3 shadow-lg">
           <div className="mb-2 flex items-center justify-between">
-            <p className="text-sm font-semibold text-zinc-900">{t("navigation.topbar.notificationsTitle")}</p>
+            <p className="text-sm font-semibold text-neutral-900">{t("navigation.topbar.notificationsTitle")}</p>
             <div className="flex items-center gap-2">
               {visibleCount > 0 ? (
                 <button
                   type="button"
                   onClick={() => void dismissAllNotifications()}
-                  disabled={dismissingAll || dismissingOne}
-                  className="text-xs font-medium text-zinc-500 transition-colors hover:text-zinc-700"
+                  disabled={dismissingAll || dismissingOne || !canMutateOrgData}
+                  className="text-xs font-medium text-neutral-500 transition-colors hover:text-neutral-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200 disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   {t("navigation.topbar.clearAll")}
                 </button>
               ) : null}
-              <span className="rounded-full bg-zinc-100 px-2 py-0.5 text-xs font-medium text-zinc-600">{visibleCount}</span>
+              <span className="rounded-full bg-neutral-100 px-2 py-0.5 text-xs font-medium text-neutral-600">{visibleCount}</span>
             </div>
           </div>
 
@@ -97,13 +99,13 @@ export function NotificationsMenu({ orgId }: NotificationsMenuProps) {
           {loading ? (
             <Loader centered label="" size="sm" />
           ) : notifications.length === 0 ? (
-            <p className="py-3 text-sm text-zinc-500">{t("navigation.topbar.notificationsEmpty")}</p>
+            <p className="py-3 text-sm text-neutral-500">{t("navigation.topbar.notificationsEmpty")}</p>
           ) : (
             <ul className="max-h-72 space-y-2 overflow-y-auto pr-1">
               {notifications.map((item) => (
-                <li key={item.id} className="rounded-lg border border-zinc-100 p-2.5">
+                <li key={item.id} className="rounded-lg border border-neutral-100 p-2.5">
                   <div className="flex items-start justify-between gap-2">
-                    <p className="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-400">
+                    <p className="text-xs font-semibold uppercase tracking-[0.08em] text-neutral-400">
                       {item.status === "PENDING"
                         ? t("navigation.topbar.notificationPending")
                         : t("navigation.topbar.notificationRejected")}
@@ -111,8 +113,8 @@ export function NotificationsMenu({ orgId }: NotificationsMenuProps) {
                     <button
                       type="button"
                       onClick={() => void dismissNotification(item.id)}
-                      disabled={dismissingOne || dismissingAll}
-                      className="inline-flex h-5 w-5 items-center justify-center rounded text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-600"
+                      disabled={dismissingOne || dismissingAll || !canMutateOrgData}
+                      className="inline-flex h-5 w-5 items-center justify-center rounded text-neutral-400 transition-colors hover:bg-neutral-100 hover:text-neutral-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200 disabled:cursor-not-allowed disabled:opacity-60"
                       aria-label={t("navigation.topbar.dismissOne")}
                     >
                       <svg
@@ -130,15 +132,19 @@ export function NotificationsMenu({ orgId }: NotificationsMenuProps) {
                       </svg>
                     </button>
                   </div>
-                  <p className="mt-1 text-sm font-medium text-zinc-800">{item.jobName}</p>
-                  <p className="text-xs text-zinc-500">{item.clientName}</p>
+                  <p className="mt-1 text-sm font-medium text-neutral-800">{item.jobName}</p>
+                  <p className="text-xs text-neutral-500">{item.clientName}</p>
                 </li>
               ))}
             </ul>
           )}
 
-          <div className="mt-3 border-t border-zinc-100 pt-2">
-            <Link href="/jobs" onClick={() => setOpen(false)} className="text-xs font-medium text-cyan-700 hover:underline">
+          <div className="mt-3 border-t border-neutral-100 pt-2">
+            <Link
+              href="/jobs"
+              onClick={() => setOpen(false)}
+              className="text-xs font-medium text-primary-700 underline-offset-2 transition-colors hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200"
+            >
               {t("navigation.topbar.viewAllJobs")}
             </Link>
           </div>
@@ -147,3 +153,4 @@ export function NotificationsMenu({ orgId }: NotificationsMenuProps) {
     </div>
   );
 }
+

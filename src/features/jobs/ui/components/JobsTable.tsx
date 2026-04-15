@@ -3,6 +3,7 @@
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import { Card, Loader, Modal, SectionHeading, TablePagination, TableSortHeader, Tooltip, useToast } from "@/components/ui";
 import { useI18n } from "@/i18n/I18nProvider";
+import { useAuth } from "@/lib/auth";
 import type { JobStatus } from "../../domain/entities/Job";
 import type { JobSortBy } from "../../domain/repositories/JobRepository";
 import { useJobs } from "../hooks/useJobs";
@@ -15,6 +16,7 @@ type JobsTableProps = {
 export function JobsTable({ orgId }: JobsTableProps) {
   const { t } = useI18n();
   const { showToast } = useToast();
+  const { canCreateJobs, canUpdateJobStatus } = useAuth();
   const {
     jobs,
     clientOptions,
@@ -120,7 +122,9 @@ export function JobsTable({ orgId }: JobsTableProps) {
           <button
             type="button"
             onClick={openCreateModal}
-            className="h-10 rounded-lg bg-cyan-600 px-4 text-sm font-medium text-white transition-colors hover:bg-cyan-700"
+            disabled={!canCreateJobs}
+            title={!canCreateJobs ? t("auth.errors.forbiddenMutation") : undefined}
+            className="h-10 rounded-lg bg-primary-600 px-4 text-sm font-medium text-white transition-colors hover:bg-primary-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200 disabled:cursor-not-allowed disabled:bg-neutral-300 disabled:text-neutral-600"
           >
             {t("jobs.actions.add")}
           </button>
@@ -135,7 +139,7 @@ export function JobsTable({ orgId }: JobsTableProps) {
             <div className="overflow-x-auto">
               <table className="w-full border-collapse text-sm">
                 <thead>
-                  <tr className="border-b border-zinc-200 text-left text-zinc-500">
+                  <tr className="border-b border-neutral-200 text-left text-neutral-500">
                     <th className="py-3 pr-3 font-medium">{renderSortHeader(t("jobs.table.column.name"), "name")}</th>
                     <th className="py-3 px-3 font-medium">
                       {renderSortHeader(t("jobs.table.column.assignedTo"), "clientName")}
@@ -148,8 +152,8 @@ export function JobsTable({ orgId }: JobsTableProps) {
                 </thead>
                 <tbody>
                   {jobs.map((job) => (
-                    <tr key={job.id} className="border-b border-zinc-100 text-zinc-700 last:border-b-0">
-                      <td className="py-3 pr-3 font-medium text-zinc-900">{job.name}</td>
+                    <tr key={job.id} className="border-b border-neutral-100 text-neutral-700 last:border-b-0">
+                      <td className="py-3 pr-3 font-medium text-neutral-900">{job.name}</td>
                       <td className="py-3 px-3">{job.clientName}</td>
                       <td className="py-3 px-3">
                         <StatusBadge status={job.status} />
@@ -159,12 +163,15 @@ export function JobsTable({ orgId }: JobsTableProps) {
                           <Tooltip content={t("jobs.tooltip.changeStatus")} side="left">
                             <button
                               type="button"
-                              disabled={statusUpdateJobId === job.id}
+                              disabled={statusUpdateJobId === job.id || !canUpdateJobStatus}
                               onClick={() => {
                                 clearStatusUpdateFeedback();
                                 setTransitionModalJobId(job.id);
                               }}
-                              className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-zinc-200 bg-white text-zinc-600 transition-colors hover:bg-zinc-100 hover:text-zinc-800 disabled:cursor-not-allowed disabled:opacity-60"
+                              title={
+                                !canUpdateJobStatus ? t("auth.errors.forbiddenMutation") : t("jobs.tooltip.changeStatus")
+                              }
+                              className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-neutral-200 bg-white text-neutral-600 transition-colors hover:bg-neutral-100 hover:text-neutral-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200 disabled:cursor-not-allowed disabled:border-neutral-200 disabled:bg-neutral-100 disabled:text-neutral-400"
                               aria-label={t("jobs.actions.changeStatus")}
                             >
                               {job.status === "PENDING" ? (
@@ -202,7 +209,7 @@ export function JobsTable({ orgId }: JobsTableProps) {
                 </tbody>
               </table>
 
-              {jobs.length === 0 ? <p className="py-4 text-sm text-zinc-500">{t("jobs.table.empty")}</p> : null}
+              {jobs.length === 0 ? <p className="py-4 text-sm text-neutral-500">{t("jobs.table.empty")}</p> : null}
             </div>
 
             <TablePagination
@@ -225,15 +232,15 @@ export function JobsTable({ orgId }: JobsTableProps) {
             <button
               type="button"
               onClick={closeCreateModal}
-              className="rounded-lg border border-zinc-200 px-4 py-2 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-100"
+              className="rounded-lg border border-neutral-200 px-4 py-2 text-sm font-medium text-neutral-700 transition-colors hover:bg-neutral-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200"
             >
               {t("common.actions.cancel")}
             </button>
             <button
               type="submit"
               form="create-job-form"
-              disabled={!canCreate}
-              className="rounded-lg bg-cyan-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-cyan-700 disabled:cursor-not-allowed disabled:opacity-60"
+              disabled={!canCreate || !canCreateJobs}
+              className="rounded-lg bg-primary-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200 disabled:cursor-not-allowed disabled:opacity-60"
             >
               {creating ? t("jobs.modal.status.creating") : t("common.actions.accept")}
             </button>
@@ -241,7 +248,7 @@ export function JobsTable({ orgId }: JobsTableProps) {
         }
       >
         <form id="create-job-form" onSubmit={handleCreate} className="space-y-3">
-          <label className="block text-sm font-medium text-zinc-700" htmlFor="job-name-input">
+          <label className="block text-sm font-medium text-neutral-700" htmlFor="job-name-input">
             {t("jobs.modal.field.name")}
           </label>
           <input
@@ -254,11 +261,11 @@ export function JobsTable({ orgId }: JobsTableProps) {
               }
             }}
             placeholder={t("jobs.modal.field.namePlaceholder")}
-            className="h-10 w-full rounded-lg border border-zinc-200 px-3 text-sm text-zinc-800 outline-none transition-colors focus:border-cyan-500"
+            className="h-10 w-full rounded-lg border border-neutral-200 px-3 text-sm text-neutral-800 outline-none transition-colors focus:border-primary-500 focus-visible:ring-2 focus-visible:ring-primary-200"
           />
           {nameError ? <p className="text-xs text-red-700">{nameError}</p> : null}
 
-          <label className="block text-sm font-medium text-zinc-700" htmlFor="job-client-select">
+          <label className="block text-sm font-medium text-neutral-700" htmlFor="job-client-select">
             {t("jobs.modal.field.client")}
           </label>
           <select
@@ -270,7 +277,7 @@ export function JobsTable({ orgId }: JobsTableProps) {
                 setClientError(null);
               }
             }}
-            className="h-10 w-full rounded-lg border border-zinc-200 px-3 text-sm text-zinc-800 outline-none transition-colors focus:border-cyan-500"
+            className="h-10 w-full rounded-lg border border-neutral-200 px-3 text-sm text-neutral-800 outline-none transition-colors focus:border-primary-500 focus-visible:ring-2 focus-visible:ring-primary-200"
           >
             <option value="">{t("jobs.modal.field.clientPlaceholder")}</option>
             {clientOptions.map((option) => (
@@ -281,7 +288,7 @@ export function JobsTable({ orgId }: JobsTableProps) {
           </select>
           {clientError ? <p className="text-xs text-red-700">{clientError}</p> : null}
 
-          <p className="text-xs text-zinc-500">{t("jobs.modal.defaultStatus")}</p>
+          <p className="text-xs text-neutral-500">{t("jobs.modal.defaultStatus")}</p>
           {createError ? <p className="text-xs text-red-700">{createError}</p> : null}
         </form>
       </Modal>
@@ -301,6 +308,11 @@ export function JobsTable({ orgId }: JobsTableProps) {
             return false;
           }
 
+          if (!canUpdateJobStatus) {
+            showToast({ message: t("auth.errors.forbiddenMutation"), variant: "error" });
+            return false;
+          }
+
           return transitionJobStatus(transitionTarget.id, payload);
         }}
       />
@@ -313,7 +325,7 @@ function StatusBadge({ status }: { status: JobStatus }) {
 
   const styleMap: Record<JobStatus, string> = {
     PENDING: "bg-amber-100 text-amber-700",
-    IN_PROGRESS: "bg-cyan-100 text-cyan-700",
+    IN_PROGRESS: "bg-primary-100 text-primary-700",
     COMPLETED: "bg-emerald-100 text-emerald-700",
     REJECTED: "bg-rose-100 text-rose-700",
   };
@@ -327,4 +339,5 @@ function StatusBadge({ status }: { status: JobStatus }) {
 
   return <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${styleMap[status]}`}>{labelMap[status]}</span>;
 }
+
 

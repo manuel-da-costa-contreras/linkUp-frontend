@@ -40,10 +40,10 @@ export function UsersList() {
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           {users.map((user) => (
             <Card key={user.id} className="space-y-1">
-              <p className="text-sm font-semibold text-zinc-900">{user.name}</p>
-              <p className="text-sm text-zinc-600">{user.email || t("users.noEmail")}</p>
-              <p className="text-xs uppercase tracking-wide text-zinc-500">{user.role}</p>
-              <p className="text-xs text-zinc-400">
+              <p className="text-sm font-semibold text-neutral-900">{user.name}</p>
+              <p className="text-sm text-neutral-600">{user.email || t("users.noEmail")}</p>
+              <p className="text-xs uppercase tracking-wide text-neutral-500">{user.role}</p>
+              <p className="text-xs text-neutral-400">
                 {t("users.joinedPrefix")} {formatDate(user.createdAt)}
               </p>
             </Card>

@@ -18,8 +18,8 @@ export function TableSortHeader({ label, active, direction, onToggle, className 
       type="button"
       onClick={onToggle}
       className={cn(
-        "inline-flex items-center gap-1 text-left text-sm font-medium transition-colors hover:text-zinc-700",
-        active ? "text-zinc-700" : "text-zinc-500",
+        "inline-flex items-center gap-1 rounded-md text-left text-sm font-medium transition-colors hover:text-neutral-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200",
+        active ? "text-neutral-700" : "text-neutral-500",
         className
       )}
       aria-label={`${label} (${direction})`}
@@ -28,7 +28,7 @@ export function TableSortHeader({ label, active, direction, onToggle, className 
       <span
         className={cn(
           "inline-flex h-4 w-4 items-center justify-center rounded-sm",
-          active ? "text-cyan-600" : "text-zinc-400"
+          active ? "text-primary-600" : "text-neutral-400"
         )}
       >
         {active ? (
@@ -78,4 +78,5 @@ export function TableSortHeader({ label, active, direction, onToggle, className 
     </button>
   );
 }
+
 

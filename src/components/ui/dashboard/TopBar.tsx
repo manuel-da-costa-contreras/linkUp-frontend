@@ -16,15 +16,17 @@ export function TopBar({ onToggleSidebar }: TopBarProps) {
   const { user, signOut } = useAuth();
   const activeOrgId = user?.orgId ?? (process.env.NEXT_PUBLIC_DEFAULT_ORG_ID ?? "acme");
   const userName = user?.name ?? "LinkUP User";
+  const roleKey = user?.role ? `userMenu.role.${user.role}` : "userMenu.role.UNKNOWN";
+  const userRole = t(roleKey);
 
   return (
-    <header className="sticky top-0 z-30 border-b border-zinc-200 bg-white/95 backdrop-blur">
+    <header className="sticky top-0 z-30 border-b border-neutral-200 bg-white/95 backdrop-blur">
       <div className="flex h-16 w-full items-center justify-between gap-4 px-3 sm:px-6">
         <div className="flex items-center gap-3">
           <button
             type="button"
             onClick={onToggleSidebar}
-            className="grid h-10 w-10 place-content-center rounded-xl border border-zinc-200 bg-white text-zinc-600 hover:border-zinc-300 lg:hidden"
+            className="grid h-10 w-10 place-content-center rounded-xl border border-neutral-200 bg-white text-neutral-600 transition-colors hover:border-neutral-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200 lg:hidden"
             aria-label={t("navigation.sidebar.openMenu")}
           >
             <svg
@@ -54,7 +56,7 @@ export function TopBar({ onToggleSidebar }: TopBarProps) {
           />
 
           <NotificationsMenu orgId={activeOrgId} />
-          <UserMenu userName={userName} onLogout={signOut} />
+          <UserMenu userName={userName} role={userRole} onLogout={signOut} />
         </div>
       </div>
     </header>

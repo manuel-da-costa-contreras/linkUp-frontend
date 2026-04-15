@@ -23,7 +23,7 @@ export function Modal({ open, title, onClose, children, footer, className }: Mod
         type="button"
         aria-label="Cerrar modal"
         onClick={onClose}
-        className="absolute inset-0 bg-zinc-950/50"
+        className="absolute inset-0 bg-neutral-900/50"
       />
 
       <section
@@ -31,16 +31,16 @@ export function Modal({ open, title, onClose, children, footer, className }: Mod
         aria-modal="true"
         aria-label={title}
         className={cn(
-          "relative z-10 w-full max-w-md rounded-2xl border border-zinc-200 bg-white p-5 shadow-xl",
+          "relative z-10 w-full max-w-md rounded-2xl border border-neutral-200 bg-white p-5 shadow-xl",
           className
         )}
       >
         <header className="mb-4 flex items-start justify-between gap-3">
-          <h3 className="text-base font-semibold text-zinc-900">{title}</h3>
+          <h3 className="text-base font-semibold text-neutral-900">{title}</h3>
           <button
             type="button"
             onClick={onClose}
-            className="rounded-md p-1 text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-700"
+            className="rounded-md p-1 text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200"
             aria-label="Cerrar"
           >
             <svg

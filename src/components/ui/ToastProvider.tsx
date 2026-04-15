@@ -65,7 +65,7 @@ export function ToastProvider({ children }: ToastProviderProps) {
               "pointer-events-auto rounded-xl border px-3 py-2 text-sm shadow-lg",
               toast.variant === "success" && "border-emerald-200 bg-emerald-50 text-emerald-700",
               toast.variant === "error" && "border-red-200 bg-red-50 text-red-700",
-              toast.variant === "info" && "border-cyan-200 bg-cyan-50 text-cyan-700"
+              toast.variant === "info" && "border-primary-200 bg-primary-50 text-primary-700"
             )}
           >
             {toast.message}
@@ -85,3 +85,4 @@ export function useToast() {
 
   return context;
 }
+

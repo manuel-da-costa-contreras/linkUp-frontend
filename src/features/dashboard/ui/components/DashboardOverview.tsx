@@ -77,7 +77,7 @@ export function DashboardOverview({ orgId }: DashboardOverviewProps) {
         <SatisfactionCard data={snapshot.satisfactionBreakdown} />
       </div>
 
-      <p className="text-xs text-zinc-500">{formatLastUpdate(snapshot.updatedAt)}</p>
+      <p className="text-xs text-neutral-500">{formatLastUpdate(snapshot.updatedAt)}</p>
     </div>
   );
 }

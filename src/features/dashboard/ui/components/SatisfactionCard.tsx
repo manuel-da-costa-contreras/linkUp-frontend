@@ -22,7 +22,7 @@ export function SatisfactionCard({ data }: SatisfactionCardProps) {
 
   return (
     <Card className="space-y-3">
-      <p className="text-sm font-semibold text-zinc-800">{t("dashboard.satisfaction.title")}</p>
+      <p className="text-sm font-semibold text-neutral-800">{t("dashboard.satisfaction.title")}</p>
       <div className="space-y-2 text-sm">
         <Row
           label={t("dashboard.satisfaction.positive")}
@@ -34,7 +34,7 @@ export function SatisfactionCard({ data }: SatisfactionCardProps) {
           label={t("dashboard.satisfaction.neutral")}
           count={data.neutral}
           percent={toPercent(data.neutral)}
-          color="bg-zinc-400"
+          color="bg-neutral-400"
         />
         <Row
           label={t("dashboard.satisfaction.negative")}
@@ -57,13 +57,13 @@ type RowProps = {
 function Row({ label, count, percent, color }: RowProps) {
   return (
     <div className="space-y-1">
-      <div className="flex items-center justify-between text-zinc-700">
+      <div className="flex items-center justify-between text-neutral-700">
         <p>{label}</p>
         <p>
           {count} ({percent}%)
         </p>
       </div>
-      <div className="h-2 rounded-full bg-zinc-100">
+      <div className="h-2 rounded-full bg-neutral-100">
         <div className={`${color} h-2 rounded-full`} style={{ width: `${percent}%` }} />
       </div>
     </div>

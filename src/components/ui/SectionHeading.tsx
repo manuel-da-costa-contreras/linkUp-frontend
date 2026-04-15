@@ -22,11 +22,11 @@ export function SectionHeading({
       )}
     >
       <div className="space-y-1">
-        <h2 className="text-xl font-semibold tracking-tight text-zinc-900 sm:text-2xl">
+        <h2 className="text-xl font-semibold tracking-tight text-neutral-900 sm:text-2xl">
           {title}
         </h2>
         {description ? (
-          <p className="text-sm leading-6 text-zinc-600 sm:text-base">{description}</p>
+          <p className="text-sm leading-6 text-neutral-600 sm:text-base">{description}</p>
         ) : null}
       </div>
       {actions ? <div>{actions}</div> : null}

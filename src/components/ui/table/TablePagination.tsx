@@ -28,7 +28,7 @@ export function TablePagination({
   const pageItems = buildPageItems(pagination.page, totalPages);
 
   return (
-    <div className="mt-4 border-t border-zinc-200 pt-3">
+    <div className="mt-4 border-t border-neutral-200 pt-3">
       <div className="flex flex-col gap-3 md:grid md:grid-cols-[1fr_auto_1fr] md:items-center">
         <div className="hidden md:block" />
 
@@ -37,7 +37,7 @@ export function TablePagination({
             type="button"
             disabled={disabled || !pagination.hasPrevPage}
             onClick={() => onPageChange(Math.max(1, pagination.page - 1))}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-zinc-200 bg-white text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-700 disabled:cursor-not-allowed disabled:opacity-50"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-neutral-200 bg-white text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200 disabled:cursor-not-allowed disabled:opacity-50"
             aria-label={t("common.pagination.previous")}
           >
             <svg
@@ -57,7 +57,7 @@ export function TablePagination({
           {pageItems.map((item, index) => {
             if (item === "dots") {
               return (
-                <span key={`dots-${index}`} className="px-1 text-sm font-semibold text-zinc-400">
+                <span key={`dots-${index}`} className="px-1 text-sm font-semibold text-neutral-400">
                   ...
                 </span>
               );
@@ -73,8 +73,8 @@ export function TablePagination({
                 onClick={() => onPageChange(item)}
                 className={
                   active
-                    ? "inline-flex h-9 min-w-9 items-center justify-center rounded-md bg-cyan-600 px-2 text-sm font-semibold text-white"
-                    : "inline-flex h-9 min-w-9 items-center justify-center rounded-md px-2 text-sm font-semibold text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-700 disabled:cursor-not-allowed disabled:opacity-50"
+                     ? "inline-flex h-9 min-w-9 items-center justify-center rounded-md bg-primary-600 px-2 text-sm font-semibold text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200"
+                     : "inline-flex h-9 min-w-9 items-center justify-center rounded-md px-2 text-sm font-semibold text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200 disabled:cursor-not-allowed disabled:opacity-50"
                 }
               >
                 {item}
@@ -86,7 +86,7 @@ export function TablePagination({
             type="button"
             disabled={disabled || !pagination.hasNextPage}
             onClick={() => onPageChange(Math.min(totalPages, pagination.page + 1))}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-zinc-200 bg-white text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-700 disabled:cursor-not-allowed disabled:opacity-50"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-neutral-200 bg-white text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200 disabled:cursor-not-allowed disabled:opacity-50"
             aria-label={t("common.pagination.next")}
           >
             <svg
@@ -105,7 +105,7 @@ export function TablePagination({
         </div>
 
         <div className="flex items-center justify-end gap-2">
-          <label htmlFor="table-page-size" className="text-xs text-zinc-500">
+          <label htmlFor="table-page-size" className="text-xs text-neutral-500">
             {t("common.pagination.pageSize")}
           </label>
           <select
@@ -113,7 +113,7 @@ export function TablePagination({
             value={pagination.pageSize}
             disabled={disabled}
             onChange={(event) => onPageSizeChange(Number.parseInt(event.target.value, 10))}
-            className="h-8 rounded-md border border-zinc-200 bg-white px-2 text-xs text-zinc-700 outline-none transition-colors focus:border-cyan-500 disabled:cursor-not-allowed disabled:opacity-60"
+            className="h-8 rounded-md border border-neutral-200 bg-white px-2 text-xs text-neutral-700 outline-none transition-colors focus:border-primary-500 focus-visible:ring-2 focus-visible:ring-primary-200 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {pageSizeOptions.map((size) => (
               <option key={size} value={size}>
@@ -142,3 +142,4 @@ function buildPageItems(currentPage: number, totalPages: number): PaginationItem
 
   return [1, "dots", currentPage - 1, currentPage, currentPage + 1, "dots", totalPages];
 }
+

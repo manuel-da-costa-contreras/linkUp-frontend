@@ -13,7 +13,7 @@ export function DashboardShell({ children }: DashboardShellProps) {
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
   return (
-    <div className="flex h-dvh flex-col overflow-hidden bg-[#f5f8ff]">
+    <div className="flex h-dvh flex-col overflow-hidden bg-neutral-100">
       <TopBar onToggleSidebar={() => setMobileSidebarOpen((prev) => !prev)} />
       <div className="flex min-h-0 flex-1 w-full">
         <Sidebar mobileOpen={mobileSidebarOpen} onClose={() => setMobileSidebarOpen(false)} />

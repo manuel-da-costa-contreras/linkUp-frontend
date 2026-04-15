@@ -21,7 +21,7 @@ export function Tooltip({ content, children, side = "top" }: TooltipProps) {
       <span
         role="tooltip"
         className={cn(
-          "pointer-events-none absolute hidden whitespace-nowrap rounded-md bg-zinc-900 px-2 py-1 text-[11px] font-medium text-white shadow-sm group-focus-within:block group-hover:block",
+          "pointer-events-none absolute hidden whitespace-nowrap rounded-md bg-neutral-900 px-2 py-1 text-[11px] font-medium text-white shadow-sm group-focus-within:block group-hover:block",
           sideClassName
         )}
       >
