@@ -44,6 +44,8 @@ const ERROR_CODE_TO_I18N_KEY: Record<string, string> = {
   CLIENT_NOT_FOUND: "clients.errors.clientNotFound",
   CLIENT_DELETE_BLOCKED: "clients.errors.clientDeleteBlocked",
   VALIDATION_ERROR: "clients.errors.validation",
+  FORBIDDEN: "auth.errors.forbiddenMutation",
+  UNAUTHORIZED: "auth.errors.unauthorized",
 };
 
 const pageSizeOptions = [10, 20, 50];

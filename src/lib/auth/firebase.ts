@@ -6,6 +6,7 @@ import {
   browserLocalPersistence,
   getAuth,
   onIdTokenChanged,
+  signInWithEmailAndPassword,
   setPersistence,
   signInWithPopup,
   signOut,
@@ -19,23 +20,60 @@ type AuthClaims = {
   role: string;
 };
 
+type RegisterInput = {
+  name: string;
+  email: string;
+  password: string;
+  orgId: string;
+};
+
+type RegisterErrorPayload = {
+  error?: {
+    code?: string;
+    message?: string;
+  };
+  message?: string;
+};
+
 let appInstance: FirebaseApp | null = null;
 let authInstance: Auth | null = null;
 let persistenceInitialized = false;
+let firebaseConfigError: string | null = null;
 
-function readEnv(name: string) {
-  const value = process.env[name];
-  return typeof value === "string" ? value.trim() : "";
+export class AuthRegistrationError extends Error {
+  constructor(
+    public readonly status: number,
+    public readonly code: string | null,
+    message: string
+  ) {
+    super(message);
+    this.name = "AuthRegistrationError";
+  }
 }
 
 function getFirebaseConfig() {
   return {
-    apiKey: readEnv("NEXT_PUBLIC_FIREBASE_API_KEY"),
-    authDomain: readEnv("NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN"),
-    projectId: readEnv("NEXT_PUBLIC_FIREBASE_PROJECT_ID"),
-    appId: readEnv("NEXT_PUBLIC_FIREBASE_APP_ID"),
-    messagingSenderId: readEnv("NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID"),
+    apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY?.trim() ?? "",
+    authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN?.trim() ?? "",
+    projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID?.trim() ?? "",
+    appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID?.trim() ?? "",
+    messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID?.trim() ?? "",
   };
+}
+
+function resolveMissingConfigKeys(config: ReturnType<typeof getFirebaseConfig>) {
+  return Object.entries(config)
+    .filter(([, value]) => !value)
+    .map(([key]) => key);
+}
+
+export function getFirebaseConfigValidationError() {
+  const missingKeys = resolveMissingConfigKeys(getFirebaseConfig());
+  if (missingKeys.length === 0) {
+    return null;
+  }
+
+  return `Missing Firebase config: ${missingKeys.join(", ")}.`;
 }
 
 function ensureFirebaseApp() {
@@ -44,15 +82,15 @@ function ensureFirebaseApp() {
   }
 
   const config = getFirebaseConfig();
-  const missingKeys = Object.entries(config)
-    .filter(([, value]) => !value)
-    .map(([key]) => key);
+  const missingKeys = resolveMissingConfigKeys(config);
 
   if (missingKeys.length > 0) {
-    throw new Error(`Missing Firebase config: ${missingKeys.join(", ")}.`);
+    firebaseConfigError = `Missing Firebase config: ${missingKeys.join(", ")}.`;
+    throw new Error(firebaseConfigError);
   }
 
   appInstance = getApps().length > 0 ? getApp() : initializeApp(config);
+  firebaseConfigError = null;
   return appInstance;
 }
 
@@ -73,8 +111,16 @@ export function getFirebaseAuth() {
     return authInstance;
   }
 
-  authInstance = getAuth(ensureFirebaseApp());
-  return authInstance;
+  try {
+    authInstance = getAuth(ensureFirebaseApp());
+    return authInstance;
+  } catch {
+    return null;
+  }
+}
+
+export function getFirebaseConfigError() {
+  return firebaseConfigError;
 }
 
 export async function initFirebaseAuthPersistence() {
@@ -97,6 +143,33 @@ export async function signInWithGooglePopup() {
   provider.setCustomParameters({ prompt: "select_account" });
 
   await signInWithPopup(auth, provider);
+}
+
+export async function signInWithEmail(email: string, password: string) {
+  const auth = getFirebaseAuth();
+  if (!auth) {
+    throw new Error("Authentication is disabled.");
+  }
+
+  await signInWithEmailAndPassword(auth, email, password);
+}
+
+export async function registerWithBackend(input: RegisterInput) {
+  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:3001";
+  const response = await fetch(`${baseUrl}/api/auth/register`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(input),
+  });
+
+  if (response.ok) {
+    return;
+  }
+
+  throw await toAuthRegistrationError(response);
 }
 
 export async function signOutFromFirebase() {
@@ -135,10 +208,11 @@ export async function readUserClaims(user: User): Promise<AuthClaims> {
 
   const claimOrgId = firstString(claims, ["orgId", "org_id"]);
   const claimRole = firstString(claims, ["role", "orgRole", "org_role"]);
+  const normalizedRole = normalizeRole(claimRole);
 
   return {
     orgId: claimOrgId || defaultOrgId,
-    role: claimRole || "USER",
+    role: normalizedRole || "VIEWER",
   };
 }
 
@@ -151,4 +225,28 @@ function firstString(source: Record<string, unknown>, keys: string[]) {
   }
 
   return "";
+}
+
+function normalizeRole(value: string) {
+  const upper = value.trim().toUpperCase();
+  if (!upper) {
+    return "";
+  }
+
+  if (upper === "USER") {
+    return "VIEWER";
+  }
+
+  return upper;
+}
+
+async function toAuthRegistrationError(response: Response) {
+  try {
+    const payload = (await response.json()) as RegisterErrorPayload;
+    const code = payload.error?.code ?? null;
+    const message = payload.error?.message ?? payload.message ?? `Request failed with status ${response.status}`;
+    return new AuthRegistrationError(response.status, code, message);
+  } catch {
+    return new AuthRegistrationError(response.status, null, `Request failed with status ${response.status}`);
+  }
 }

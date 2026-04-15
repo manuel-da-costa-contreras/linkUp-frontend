@@ -49,6 +49,8 @@ const ERROR_CODE_TO_I18N_KEY: Record<string, string> = {
   RATING_OUT_OF_RANGE: "jobs.errors.ratingOutOfRange",
   REASON_TOO_LONG: "jobs.errors.reasonTooLong",
   VALIDATION_ERROR: "jobs.errors.validation",
+  FORBIDDEN: "auth.errors.forbiddenMutation",
+  UNAUTHORIZED: "auth.errors.unauthorized",
 };
 
 const pageSizeOptions = [10, 20, 50];

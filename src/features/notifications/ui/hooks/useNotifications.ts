@@ -36,7 +36,7 @@ export function useNotifications(orgId: string): UseNotificationsResult {
   const query = useQuery({
     queryKey: notificationsQueryKeys.jobAlerts(orgId),
     queryFn: () => getJobAlertsUseCase.execute(orgId),
-    refetchInterval: 10000,
+    refetchInterval: 60000,
   });
 
   const dismissOneMutation = useMutation({
