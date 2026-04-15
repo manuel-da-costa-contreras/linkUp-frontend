@@ -3,10 +3,14 @@
 import { createContext, ReactNode, useContext, useEffect, useMemo, useState } from "react";
 import {
   getCurrentIdToken,
+  getFirebaseConfigError,
+  getFirebaseConfigValidationError,
   getDefaultOrgId,
   initFirebaseAuthPersistence,
   isAuthEnabled,
   readUserClaims,
+  registerWithBackend,
+  signInWithEmail,
   signInWithGooglePopup,
   signOutFromFirebase,
   subscribeToIdTokenChanges,
@@ -22,12 +26,22 @@ type AuthUser = {
   role: string;
 };
 
+const MUTATION_ROLES = ["OWNER", "ADMIN", "MANAGER"] as const;
+const JOB_CREATE_ROLES = ["OWNER", "ADMIN", "MANAGER", "VIEWER"] as const;
+
 type AuthContextValue = {
   status: AuthStatus;
   user: AuthUser | null;
   authEnabled: boolean;
   authError: string | null;
-  signIn: () => Promise<void>;
+  canMutateOrgData: boolean;
+  canManageClients: boolean;
+  canCreateJobs: boolean;
+  canUpdateJobStatus: boolean;
+  hasRole: (...roles: string[]) => boolean;
+  signInWithGoogle: () => Promise<void>;
+  signInWithEmailPassword: (email: string, password: string) => Promise<void>;
+  signUpWithEmailPassword: (name: string, email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
   refreshToken: () => Promise<string | null>;
 };
@@ -40,7 +54,11 @@ type AuthProviderProps = {
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const authEnabled = isAuthEnabled();
-  const [status, setStatus] = useState<AuthStatus>(authEnabled ? "loading" : "authenticated");
+  const initialConfigError =
+    authEnabled && typeof window !== "undefined" ? getFirebaseConfigValidationError() : null;
+  const [status, setStatus] = useState<AuthStatus>(
+    authEnabled ? (initialConfigError ? "unauthenticated" : "loading") : "authenticated"
+  );
   const [user, setUser] = useState<AuthUser | null>(
     authEnabled
       ? null
@@ -52,7 +70,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
           role: "ADMIN",
         }
   );
-  const [authError, setAuthError] = useState<string | null>(null);
+  const [authError, setAuthError] = useState<string | null>(initialConfigError);
 
   useEffect(() => {
     if (!authEnabled) {
@@ -60,6 +78,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
 
     let active = true;
+    const configError = getFirebaseConfigValidationError() ?? getFirebaseConfigError();
+    if (configError) {
+      queueMicrotask(() => {
+        if (!active) {
+          return;
+        }
+
+        setAuthError(configError);
+        setStatus("unauthenticated");
+      });
+      return;
+    }
 
     initFirebaseAuthPersistence().catch((error) => {
       if (!active) {
@@ -128,9 +158,25 @@ export function AuthProvider({ children }: AuthProviderProps) {
     };
   }, [authEnabled]);
 
-  async function signIn() {
+  async function signInWithGoogle() {
     setAuthError(null);
     await signInWithGooglePopup();
+  }
+
+  async function signInWithEmailPassword(email: string, password: string) {
+    setAuthError(null);
+    await signInWithEmail(email, password);
+  }
+
+  async function signUpWithEmailPassword(name: string, email: string, password: string) {
+    setAuthError(null);
+    await registerWithBackend({
+      name,
+      email,
+      password,
+      orgId: getDefaultOrgId(),
+    });
+    await signInWithEmail(email, password);
   }
 
   async function signOut() {
@@ -148,7 +194,24 @@ export function AuthProvider({ children }: AuthProviderProps) {
       user,
       authEnabled,
       authError,
-      signIn,
+      canMutateOrgData: user ? MUTATION_ROLES.includes(user.role as (typeof MUTATION_ROLES)[number]) : !authEnabled,
+      canManageClients: user ? MUTATION_ROLES.includes(user.role as (typeof MUTATION_ROLES)[number]) : !authEnabled,
+      canCreateJobs: user ? JOB_CREATE_ROLES.includes(user.role as (typeof JOB_CREATE_ROLES)[number]) : !authEnabled,
+      canUpdateJobStatus: user ? MUTATION_ROLES.includes(user.role as (typeof MUTATION_ROLES)[number]) : !authEnabled,
+      hasRole: (...roles) => {
+        if (!authEnabled) {
+          return true;
+        }
+
+        if (!user) {
+          return false;
+        }
+
+        return roles.includes(user.role);
+      },
+      signInWithGoogle,
+      signInWithEmailPassword,
+      signUpWithEmailPassword,
       signOut,
       refreshToken,
     }),
