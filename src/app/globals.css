@@ -32,6 +32,13 @@
   --font-mono: var(--font-geist-mono);
 }
 
+:root {
+  --chart-axis: var(--color-neutral-600);
+  --chart-tooltip-border: var(--color-neutral-300);
+  --chart-series-open: #f59e0b;
+  --chart-series-completed: var(--color-primary-600);
+}
+
 * {
   box-sizing: border-box;
 }
