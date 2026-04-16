@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { cn } from "@/utils/cn";
+import { cn } from "@utils/cn";
 
 type RatingStarsProps = {
   value: number;
@@ -52,4 +52,5 @@ export function RatingStars({ value, max = 5, onChange, label, className }: Rati
     </div>
   );
 }
+
 

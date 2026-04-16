@@ -1,4 +1,4 @@
-import type { TranslationNamespace } from "../../types";
+import type { TranslationNamespace } from "@i18n/types";
 
 export const authEs: TranslationNamespace = {
   "loading": "Verificando sesion...",
@@ -38,3 +38,5 @@ export const authEs: TranslationNamespace = {
   "errors.unauthorized": "Tu sesion no es valida o expiro.",
   "errors.forbiddenMutation": "Tu rol no tiene permisos para esta accion.",
 };
+
+

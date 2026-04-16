@@ -1,4 +1,4 @@
-import type { TranslationNamespace } from "../../types";
+import type { TranslationNamespace } from "@i18n/types";
 
 export const authEn: TranslationNamespace = {
   "loading": "Checking session...",
@@ -38,3 +38,5 @@ export const authEn: TranslationNamespace = {
   "errors.unauthorized": "Your session is invalid or expired.",
   "errors.forbiddenMutation": "Your role does not have permission for this action.",
 };
+
+

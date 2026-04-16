@@ -1,7 +1,7 @@
-import { ApiError, apiRequest } from "@/lib/api/httpClient";
-import type { User } from "../../domain/entities/User";
-import type { UserRepository } from "../../domain/repositories/UserRepository";
-import { mapApiUserToDomain, mapDomainUserToApi } from "../mappers/user.mapper";
+import { ApiError, apiRequest } from "@lib/api/httpClient";
+import type { User } from "@features/users/domain/entities/User";
+import type { UserRepository } from "@features/users/domain/repositories/UserRepository";
+import { mapApiUserToDomain, mapDomainUserToApi } from "@features/users/infrastructure/mappers/user.mapper";
 
 const defaultOrgId = process.env.NEXT_PUBLIC_DEFAULT_ORG_ID ?? "demo-org";
 
@@ -65,3 +65,5 @@ function toObjectPayload(payload: unknown) {
 
   throw new ApiError(500, null, null, "Invalid object payload format.");
 }
+
+

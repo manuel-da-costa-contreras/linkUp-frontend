@@ -1,1 +1,2 @@
-export * from "./ui/components/JobsTable";
+export * from "@features/jobs/ui/components/JobsTable";
+

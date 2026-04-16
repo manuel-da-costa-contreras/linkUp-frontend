@@ -1,4 +1,4 @@
-import { getCurrentIdToken, isAuthEnabled } from "@/lib/auth";
+import { getCurrentIdToken, isAuthEnabled } from "@lib/auth";
 
 export type ApiErrorPayload = {
   success?: boolean;
@@ -86,3 +86,4 @@ async function toApiError(response: Response) {
     return new ApiError(response.status, null, null, `Request failed with status ${response.status}`);
   }
 }
+

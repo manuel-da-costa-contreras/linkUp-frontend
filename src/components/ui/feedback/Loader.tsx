@@ -1,4 +1,4 @@
-import { cn } from "@/utils/cn";
+import { cn } from "@utils/cn";
 
 type LoaderSize = "sm" | "md" | "lg";
 
@@ -10,9 +10,9 @@ type LoaderProps = {
 };
 
 const sizeStyles: Record<LoaderSize, string> = {
-  sm: "h-6 w-6 border-2",
-  md: "h-8 w-8 border-[3px]",
-  lg: "h-10 w-10 border-4",
+  sm: "h-6 w-6",
+  md: "h-8 w-8",
+  lg: "h-10 w-10",
 };
 
 export function Loader({
@@ -33,12 +33,15 @@ export function Loader({
     >
       <span
         aria-hidden="true"
-        className={cn("relative rounded-full border-neutral-200", sizeStyles[size])}
+        className={cn("relative inline-block", sizeStyles[size])}
       >
-        <span className="absolute inset-px rounded-full border-inherit border-t-primary-600 animate-spin" />
+        <span className="absolute inset-0 rounded-full border border-neutral-300/80" />
+        <span className="absolute inset-0 rounded-full border-2 border-transparent border-t-primary-600 border-r-primary-400 animate-spin" />
+        <span className="absolute inset-1 rounded-full border border-primary-200/70 animate-pulse" />
       </span>
       {label ? <span>{label}</span> : null}
     </div>
   );
 }
+
 

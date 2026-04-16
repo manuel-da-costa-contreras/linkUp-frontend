@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { cn } from "@/utils/cn";
+import { cn } from "@utils/cn";
 
 type ModalProps = {
   open: boolean;
@@ -10,9 +10,10 @@ type ModalProps = {
   children: ReactNode;
   footer?: ReactNode;
   className?: string;
+  testId?: string;
 };
 
-export function Modal({ open, title, onClose, children, footer, className }: ModalProps) {
+export function Modal({ open, title, onClose, children, footer, className, testId }: ModalProps) {
   if (!open) {
     return null;
   }
@@ -30,6 +31,7 @@ export function Modal({ open, title, onClose, children, footer, className }: Mod
         role="dialog"
         aria-modal="true"
         aria-label={title}
+        data-testid={testId}
         className={cn(
           "relative z-10 w-full max-w-md rounded-2xl border border-neutral-200 bg-white p-5 shadow-xl",
           className
@@ -65,3 +67,4 @@ export function Modal({ open, title, onClose, children, footer, className }: Mod
     </div>
   );
 }
+

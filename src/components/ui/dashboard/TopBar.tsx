@@ -1,11 +1,11 @@
-﻿"use client";
+"use client";
 
-import { LanguageSelector } from "@/components/ui/LanguageSelector";
-import { NotificationsMenu } from "@/features/notifications";
-import { useI18n } from "@/i18n/I18nProvider";
-import { useAuth } from "@/lib/auth";
-import { AppLogo } from "./AppLogo";
-import { UserMenu } from "./UserMenu";
+import { LanguageSelector } from "@components/ui";
+import { NotificationsMenu } from "@features/notifications";
+import { useI18n } from "@i18n/I18nProvider";
+import { useAuth } from "@lib/auth";
+import { AppLogo } from "@components/ui/dashboard/AppLogo";
+import { UserMenu } from "@components/ui/dashboard/UserMenu";
 
 type TopBarProps = {
   onToggleSidebar: () => void;
@@ -62,3 +62,6 @@ export function TopBar({ onToggleSidebar }: TopBarProps) {
     </header>
   );
 }
+
+
+

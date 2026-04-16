@@ -1,8 +1,8 @@
 "use client";
 
 import { FormEvent, useMemo, useState } from "react";
-import { Modal, RatingStars } from "@/components/ui";
-import { useI18n } from "@/i18n/I18nProvider";
+import { Modal, RatingStars } from "@components/ui";
+import { useI18n } from "@i18n/I18nProvider";
 
 type TransitionSourceStatus = "PENDING" | "IN_PROGRESS";
 
@@ -92,6 +92,7 @@ export function JobStatusTransitionModal({
       open={open}
       title={t("jobs.modal.transition.title")}
       onClose={handleClose}
+      testId="job-status-modal"
       footer={
         <>
           <button
@@ -104,6 +105,7 @@ export function JobStatusTransitionModal({
           <button
             type="submit"
             form="job-status-transition-form"
+            data-testid="job-status-submit"
             disabled={loading}
             className="rounded-lg bg-primary-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200 disabled:cursor-not-allowed disabled:opacity-60"
           >
@@ -118,7 +120,9 @@ export function JobStatusTransitionModal({
         </label>
         <select
           id="job-next-status-select"
+          data-testid="job-status-select"
           value={nextStatus}
+          disabled={loading}
           onChange={(event) => {
             const status = event.target.value as TransitionTargetStatus;
             setNextStatus(status);
@@ -182,4 +186,5 @@ export function JobStatusTransitionModal({
     </Modal>
   );
 }
+
 

@@ -3,7 +3,7 @@ import type {
   DashboardSnapshot,
   JobsTrendPoint,
   SatisfactionBreakdown,
-} from "../../domain/entities/DashboardSnapshot";
+} from "@features/dashboard/domain/entities/DashboardSnapshot";
 
 type ApiTimestampObject = {
   _seconds?: number;
@@ -109,3 +109,4 @@ export function mapDashboardResponseToDomain(
     updatedAt: resolveDate(source.updatedAt),
   };
 }
+

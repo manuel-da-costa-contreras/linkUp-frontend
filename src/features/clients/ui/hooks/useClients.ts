@@ -2,18 +2,19 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCallback, useMemo, useState } from "react";
-import { useI18n } from "@/i18n/I18nProvider";
-import { ApiError } from "@/lib/api/httpClient";
-import type { PaginationMeta } from "@/shared/pagination/types";
-import { useDebounce } from "@/utils/useDebounce";
-import { CreateClientUseCase } from "../../application/use-cases/CreateClientUseCase";
-import { DeleteClientUseCase } from "../../application/use-cases/DeleteClientUseCase";
-import { GetClientsUseCase } from "../../application/use-cases/GetClientsUseCase";
-import { clientsQueryKeys } from "../../application/use-cases/queryKeys";
-import { UpdateClientUseCase } from "../../application/use-cases/UpdateClientUseCase";
-import type { Client } from "../../domain/entities/Client";
-import type { ClientSortBy, SortDir } from "../../domain/repositories/ClientRepository";
-import { BackendClientRepository } from "../../infrastructure/repositories/BackendClientRepository";
+import { useI18n } from "@i18n/I18nProvider";
+import { ApiError } from "@lib/api/httpClient";
+import type { PaginationMeta } from "@shared/pagination/types";
+import { useDebounce } from "@utils/useDebounce";
+import { CreateClientUseCase } from "@features/clients/application/use-cases/CreateClientUseCase";
+import { DeleteClientUseCase } from "@features/clients/application/use-cases/DeleteClientUseCase";
+import { GetClientsUseCase } from "@features/clients/application/use-cases/GetClientsUseCase";
+import { clientsQueryKeys } from "@features/clients/application/use-cases/queryKeys";
+import { UpdateClientUseCase } from "@features/clients/application/use-cases/UpdateClientUseCase";
+import type { Client } from "@features/clients/domain/entities/Client";
+import type { ClientSortBy, SortDir } from "@features/clients/domain/repositories/ClientRepository";
+import { BackendClientRepository } from "@features/clients/infrastructure/repositories/BackendClientRepository";
+import { jobsQueryKeys } from "@features/jobs/application/use-cases/queryKeys";
 
 type UseClientsResult = {
   search: string;
@@ -43,6 +44,7 @@ const ERROR_CODE_TO_I18N_KEY: Record<string, string> = {
   CLIENT_NAME_EXISTS: "clients.errors.clientNameExists",
   CLIENT_NOT_FOUND: "clients.errors.clientNotFound",
   CLIENT_DELETE_BLOCKED: "clients.errors.clientDeleteBlocked",
+  CLIENT_DELETE_REASSIGN_FAILED: "clients.errors.clientDeleteReassignFailed",
   VALIDATION_ERROR: "clients.errors.validation",
   FORBIDDEN: "auth.errors.forbiddenMutation",
   UNAUTHORIZED: "auth.errors.unauthorized",
@@ -115,6 +117,7 @@ export function useClients(orgId: string): UseClientsResult {
     mutationFn: (name: string) => createClientUseCase.execute(orgId, name),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: clientsQueryKeys.all(orgId) });
+      queryClient.invalidateQueries({ queryKey: jobsQueryKeys.clientOptions(orgId) });
     },
   });
 
@@ -123,6 +126,7 @@ export function useClients(orgId: string): UseClientsResult {
       updateClientUseCase.execute(orgId, clientId, name),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: clientsQueryKeys.all(orgId) });
+      queryClient.invalidateQueries({ queryKey: jobsQueryKeys.clientOptions(orgId) });
     },
   });
 
@@ -130,6 +134,7 @@ export function useClients(orgId: string): UseClientsResult {
     mutationFn: (clientId: string) => deleteClientUseCase.execute(orgId, clientId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: clientsQueryKeys.all(orgId) });
+      queryClient.invalidateQueries({ queryKey: jobsQueryKeys.clientOptions(orgId) });
     },
   });
 
@@ -232,3 +237,6 @@ function buildErrorParams(
 
   return { field, reason };
 }
+
+
+

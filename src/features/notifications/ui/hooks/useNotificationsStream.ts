@@ -2,10 +2,10 @@
 
 import { useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { isAuthEnabled } from "@/lib/auth";
-import { ApiError, apiRequest } from "@/lib/api/httpClient";
-import { notificationsQueryKeys } from "../../application/use-cases/queryKeys";
-import type { JobAlertNotification, JobAlertStatus } from "../../domain/entities/JobAlertNotification";
+import { isAuthEnabled } from "@lib/auth";
+import { ApiError, apiRequest } from "@lib/api/httpClient";
+import { notificationsQueryKeys } from "@features/notifications/application/use-cases/queryKeys";
+import type { JobAlertNotification, JobAlertStatus } from "@features/notifications/domain/entities/JobAlertNotification";
 
 type StreamEventEnvelope<TData> = {
   type?: string;
@@ -317,3 +317,6 @@ export function useNotificationsStream(orgId: string) {
     };
   }, [orgId, queryClient]);
 }
+
+
+

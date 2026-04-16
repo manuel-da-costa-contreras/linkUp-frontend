@@ -1,4 +1,4 @@
-import type { TranslationNamespace } from "../../types";
+import type { TranslationNamespace } from "@i18n/types";
 
 export const usersEs: TranslationNamespace = {
   "heading.title": "Usuarios",
@@ -10,3 +10,4 @@ export const usersEs: TranslationNamespace = {
   "noEmail": "Sin correo",
   "joinedPrefix": "Alta:",
 };
+

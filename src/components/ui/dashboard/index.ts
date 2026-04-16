@@ -1,2 +1,4 @@
-export * from "./DashboardShell";
-export * from "./DashboardFooter";
+export * from "@components/ui/dashboard/DashboardShell";
+export * from "@components/ui/dashboard/DashboardFooter";
+
+

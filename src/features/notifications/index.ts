@@ -1,1 +1,3 @@
-﻿export * from "./ui/components/NotificationsMenu";
+export * from "@features/notifications/ui/components/NotificationsMenu";
+
+

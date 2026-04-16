@@ -1,7 +1,7 @@
 "use client";
 
-import { useI18n } from "@/i18n/I18nProvider";
-import type { PaginationMeta } from "@/shared/pagination/types";
+import { useI18n } from "@i18n/I18nProvider";
+import type { PaginationMeta } from "@shared/pagination/types";
 
 type TablePaginationProps = {
   pagination: PaginationMeta;
@@ -142,4 +142,5 @@ function buildPageItems(currentPage: number, totalPages: number): PaginationItem
 
   return [1, "dots", currentPage - 1, currentPage, currentPage + 1, "dots", totalPages];
 }
+
 

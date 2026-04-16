@@ -1,12 +1,12 @@
 "use client";
 
 import { FormEvent, useMemo, useState } from "react";
-import { Card, Loader, Modal, SectionHeading, TablePagination, TableSortHeader } from "@/components/ui";
-import { useI18n } from "@/i18n/I18nProvider";
-import { useAuth } from "@/lib/auth";
-import type { Client } from "../../domain/entities/Client";
-import type { ClientSortBy } from "../../domain/repositories/ClientRepository";
-import { useClients } from "../hooks/useClients";
+import { Card, Loader, Modal, SectionHeading, TablePagination, TableSortHeader } from "@components/ui";
+import { useI18n } from "@i18n/I18nProvider";
+import { useAuth } from "@lib/auth";
+import type { Client } from "@features/clients/domain/entities/Client";
+import type { ClientSortBy } from "@features/clients/domain/repositories/ClientRepository";
+import { useClients } from "@features/clients/ui/hooks/useClients";
 
 type ClientsTableProps = {
   orgId: string;
@@ -47,6 +47,8 @@ export function ClientsTable({ orgId }: ClientsTableProps) {
   const [editingClient, setEditingClient] = useState<Client | null>(null);
   const [editClientName, setEditClientName] = useState("");
   const [editNameError, setEditNameError] = useState<string | null>(null);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [deleteTargetClient, setDeleteTargetClient] = useState<Client | null>(null);
 
   const canSubmit = useMemo(() => newClientName.trim().length >= 2 && !creating, [creating, newClientName]);
   const canEditSubmit = useMemo(() => editClientName.trim().length >= 2 && !editing, [editClientName, editing]);
@@ -113,8 +115,29 @@ export function ClientsTable({ orgId }: ClientsTableProps) {
     }
   }
 
-  async function handleDelete(clientId: string) {
-    await deleteClient(clientId);
+  function openDeleteModal(client: Client) {
+    setDeleteTargetClient(client);
+    setDeleteModalOpen(true);
+  }
+
+  function closeDeleteModal() {
+    if (deleteTargetClient && deletingClientId === deleteTargetClient.id) {
+      return;
+    }
+
+    setDeleteModalOpen(false);
+    setDeleteTargetClient(null);
+  }
+
+  async function handleConfirmDelete() {
+    if (!deleteTargetClient) {
+      return;
+    }
+
+    const ok = await deleteClient(deleteTargetClient.id);
+    if (ok) {
+      closeDeleteModal();
+    }
   }
 
   function renderSortHeader(label: string, field: ClientSortBy) {
@@ -159,7 +182,7 @@ export function ClientsTable({ orgId }: ClientsTableProps) {
           <p className="text-sm text-red-700">{error}</p>
         ) : (
           <>
-            <div className="overflow-x-auto">
+            <div className="relative overflow-x-auto">
               <table className="w-full min-w-[760px] border-collapse text-sm">
                 <thead>
                   <tr className="border-b border-neutral-200 text-left text-neutral-500">
@@ -198,7 +221,8 @@ export function ClientsTable({ orgId }: ClientsTableProps) {
                       <td className="py-3 pl-3 text-right">
                         <button
                           type="button"
-                          onClick={() => handleDelete(client.id)}
+                          onClick={() => openDeleteModal(client)}
+                          data-testid="client-row-delete"
                           disabled={deletingClientId === client.id || !canManageClients}
                           title={!canManageClients ? t("auth.errors.forbiddenMutation") : t("clients.tooltip.delete")}
                           aria-label={t("clients.tooltip.delete")}
@@ -228,6 +252,12 @@ export function ClientsTable({ orgId }: ClientsTableProps) {
               </table>
               {clients.length === 0 ? <p className="py-4 text-sm text-neutral-500">{t("clients.table.empty")}</p> : null}
               {deleteError ? <p className="pt-2 text-xs text-red-700">{deleteError}</p> : null}
+
+              {deletingClientId ? (
+                <div className="absolute inset-0 z-10 grid place-items-center rounded-xl bg-white/70 backdrop-blur-[2px]">
+                  <Loader centered label={t("clients.modal.status.deleting")} />
+                </div>
+              ) : null}
             </div>
 
             <TablePagination
@@ -330,8 +360,54 @@ export function ClientsTable({ orgId }: ClientsTableProps) {
           {editError ? <p className="text-xs text-red-700">{editError}</p> : null}
         </form>
       </Modal>
+
+      <Modal
+        open={deleteModalOpen}
+        title={t("clients.modal.delete.title")}
+        onClose={closeDeleteModal}
+        testId="client-delete-modal"
+        footer={
+          <>
+            <button
+              type="button"
+              onClick={closeDeleteModal}
+              className="rounded-lg border border-neutral-200 px-4 py-2 text-sm font-medium text-neutral-700 transition-colors hover:bg-neutral-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200"
+            >
+              {t("common.actions.cancel")}
+            </button>
+            <button
+              type="button"
+              onClick={() => void handleConfirmDelete()}
+              data-testid="client-delete-confirm"
+              disabled={!deleteTargetClient || deletingClientId === deleteTargetClient?.id}
+              className="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-red-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {deleteTargetClient && deletingClientId === deleteTargetClient.id
+                ? t("clients.modal.status.deleting")
+                : t("common.actions.delete")}
+            </button>
+          </>
+        }
+      >
+        {deleteTargetClient ? (
+          <div className="space-y-2">
+            <p className="text-sm text-neutral-700">
+              {t("clients.modal.delete.description", { name: deleteTargetClient.name })}
+            </p>
+            <p className="text-xs text-neutral-500">
+              {deleteTargetClient.totalJobs > 0
+                ? t("clients.modal.delete.withJobs", { total: deleteTargetClient.totalJobs })
+                : t("clients.modal.delete.withoutJobs")}
+            </p>
+            {deleteError ? <p className="pt-1 text-xs text-red-700">{deleteError}</p> : null}
+          </div>
+        ) : null}
+      </Modal>
     </div>
   );
 }
+
+
+
 
 

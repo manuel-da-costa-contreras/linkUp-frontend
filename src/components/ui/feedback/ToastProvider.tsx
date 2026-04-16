@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, ReactNode, useCallback, useContext, useMemo, useState } from "react";
-import { cn } from "@/utils/cn";
+import { cn } from "@utils/cn";
 
 type ToastVariant = "success" | "error" | "info";
 
@@ -85,4 +85,5 @@ export function useToast() {
 
   return context;
 }
+
 

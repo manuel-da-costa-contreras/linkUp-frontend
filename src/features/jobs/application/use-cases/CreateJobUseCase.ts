@@ -1,5 +1,5 @@
-import type { Job } from "../../domain/entities/Job";
-import type { JobRepository } from "../../domain/repositories/JobRepository";
+import type { Job } from "@features/jobs/domain/entities/Job";
+import type { JobRepository } from "@features/jobs/domain/repositories/JobRepository";
 
 export class CreateJobUseCase {
   constructor(private readonly jobRepository: JobRepository) {}
@@ -12,3 +12,4 @@ export class CreateJobUseCase {
     });
   }
 }
+

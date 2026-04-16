@@ -1,8 +1,8 @@
 "use client";
 
-import { Card } from "@/components/ui";
-import { useI18n } from "@/i18n/I18nProvider";
-import type { SatisfactionBreakdown } from "../../domain/entities/DashboardSnapshot";
+import { Card } from "@components/ui";
+import { useI18n } from "@i18n/I18nProvider";
+import type { SatisfactionBreakdown } from "@features/dashboard/domain/entities/DashboardSnapshot";
 
 type SatisfactionCardProps = {
   data: SatisfactionBreakdown;
@@ -69,3 +69,6 @@ function Row({ label, count, percent, color }: RowProps) {
     </div>
   );
 }
+
+
+

@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useI18n } from "@/i18n/I18nProvider";
-import { cn } from "@/utils/cn";
+import { useI18n } from "@i18n/I18nProvider";
+import { cn } from "@utils/cn";
 
 type UserMenuProps = {
   userName: string;
@@ -91,3 +91,4 @@ export function UserMenu({ userName, role, onLogout }: UserMenuProps) {
     </div>
   );
 }
+

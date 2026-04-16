@@ -2,10 +2,10 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { Loader } from "@/components/ui";
-import { useI18n } from "@/i18n/I18nProvider";
-import { useAuth } from "@/lib/auth";
-import { useNotifications } from "../hooks/useNotifications";
+import { Loader } from "@components/ui";
+import { useI18n } from "@i18n/I18nProvider";
+import { useAuth } from "@lib/auth";
+import { useNotifications } from "@features/notifications/ui/hooks/useNotifications";
 
 type NotificationsMenuProps = {
   orgId: string;
@@ -153,4 +153,7 @@ export function NotificationsMenu({ orgId }: NotificationsMenuProps) {
     </div>
   );
 }
+
+
+
 

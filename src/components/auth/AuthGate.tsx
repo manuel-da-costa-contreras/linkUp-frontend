@@ -1,10 +1,10 @@
 "use client";
 
 import { ReactNode, useEffect, useMemo, useState } from "react";
-import { Loader } from "@/components/ui";
-import { useI18n } from "@/i18n/I18nProvider";
-import { useAuth } from "@/lib/auth";
-import { AuthRegistrationError } from "@/lib/auth/firebase";
+import { Loader } from "@components/ui";
+import { useI18n } from "@i18n/I18nProvider";
+import { useAuth } from "@lib/auth";
+import { AuthRegistrationError } from "@lib/auth/firebase";
 
 type AuthGateProps = {
   children: ReactNode;
@@ -313,3 +313,4 @@ export function AuthGate({ children }: AuthGateProps) {
     </div>
   );
 }
+

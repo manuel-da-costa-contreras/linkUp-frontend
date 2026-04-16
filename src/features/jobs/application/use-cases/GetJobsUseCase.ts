@@ -1,11 +1,17 @@
-import type { PaginatedResult, PaginationQuery } from "@/shared/pagination/types";
-import type { Job } from "../../domain/entities/Job";
-import type { JobRepository, JobSortBy, SortDir } from "../../domain/repositories/JobRepository";
+import type { PaginatedResult, PaginationQuery } from "@shared/pagination/types";
+import type { Job } from "@features/jobs/domain/entities/Job";
+import type { JobRepository, JobSortBy, SortDir } from "@features/jobs/domain/repositories/JobRepository";
 
 export class GetJobsUseCase {
   constructor(private readonly jobRepository: JobRepository) {}
 
-  execute(orgId: string, params: PaginationQuery & { sortBy: JobSortBy; sortDir: SortDir }): Promise<PaginatedResult<Job>> {
+  execute(
+    orgId: string,
+    params: PaginationQuery & { search: string; sortBy: JobSortBy; sortDir: SortDir }
+  ): Promise<PaginatedResult<Job>> {
     return this.jobRepository.findAll(orgId, params);
   }
 }
+
+
+

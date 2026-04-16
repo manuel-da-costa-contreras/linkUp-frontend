@@ -1,8 +1,8 @@
 "use client";
 
-import { Card, Loader, SectionHeading } from "@/components/ui";
-import { useI18n } from "@/i18n/I18nProvider";
-import { useUsers } from "../hooks/useUsers";
+import { Card, Loader, SectionHeading } from "@components/ui";
+import { useI18n } from "@i18n/I18nProvider";
+import { useUsers } from "@features/users/ui/hooks/useUsers";
 
 export function UsersList() {
   const { users, loading, error } = useUsers();
@@ -53,3 +53,6 @@ export function UsersList() {
     </section>
   );
 }
+
+
+

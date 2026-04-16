@@ -1,1 +1,2 @@
-export * from "./ui/components/ClientsTable";
+export * from "@features/clients/ui/components/ClientsTable";
+

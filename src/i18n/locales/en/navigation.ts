@@ -1,4 +1,4 @@
-import type { TranslationNamespace } from "../../types";
+import type { TranslationNamespace } from "@i18n/types";
 
 export const navigationEn: TranslationNamespace = {
   "sidebar.title": "Navigation",
@@ -18,5 +18,7 @@ export const navigationEn: TranslationNamespace = {
   "footer.linkedin": "LinkedIn",
   "footer.github": "GitHub"
 };
+
+
 
 

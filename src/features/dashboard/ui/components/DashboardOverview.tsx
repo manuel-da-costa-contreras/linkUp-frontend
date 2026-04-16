@@ -1,11 +1,11 @@
 "use client";
 
-import { Card, Loader, SectionHeading } from "@/components/ui";
-import { useI18n } from "@/i18n/I18nProvider";
-import { useDashboardSnapshot } from "../hooks/useDashboardSnapshot";
-import { JobsTrendChart } from "./JobsTrendChart";
-import { MetricCard } from "./MetricCard";
-import { SatisfactionCard } from "./SatisfactionCard";
+import { Card, Loader, SectionHeading } from "@components/ui";
+import { useI18n } from "@i18n/I18nProvider";
+import { useDashboardSnapshot } from "@features/dashboard/ui/hooks/useDashboardSnapshot";
+import { JobsTrendChart } from "@features/dashboard/ui/components/JobsTrendChart";
+import { MetricCard } from "@features/dashboard/ui/components/MetricCard";
+import { SatisfactionCard } from "@features/dashboard/ui/components/SatisfactionCard";
 
 type DashboardOverviewProps = {
   orgId: string;
@@ -81,3 +81,6 @@ export function DashboardOverview({ orgId }: DashboardOverviewProps) {
     </div>
   );
 }
+
+
+

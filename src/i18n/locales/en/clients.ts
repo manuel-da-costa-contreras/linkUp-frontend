@@ -1,4 +1,4 @@
-import type { TranslationNamespace } from "../../types";
+import type { TranslationNamespace } from "@i18n/types";
 
 export const clientsEn: TranslationNamespace = {
   "heading.title": "Clients",
@@ -13,6 +13,7 @@ export const clientsEn: TranslationNamespace = {
   "errors.clientNameExists": "A client with '{{field}}' already exists in this organization.",
   "errors.clientNotFound": "Client not found by '{{field}}'.",
   "errors.clientDeleteBlocked": "Client cannot be deleted due to '{{reason}}'.",
+  "errors.clientDeleteReassignFailed": "Failed to reassign client jobs before deleting.",
   "errors.validation": "Request has invalid data in '{{field}}'.",
   "fields.name": "name",
   "fields.clientId": "client id",
@@ -27,10 +28,16 @@ export const clientsEn: TranslationNamespace = {
   "table.empty": "No clients to display.",
   "modal.create.title": "Add client",
   "modal.edit.title": "Edit client",
+  "modal.delete.title": "Delete client",
+  "modal.delete.description": "'{{name}}' will be deleted.",
+  "modal.delete.withJobs": "This client has {{total}} associated jobs. After deletion, those jobs will become unassigned and move to Pending.",
+  "modal.delete.withoutJobs": "This client has no associated jobs.",
   "modal.field.name": "Name",
   "modal.field.placeholder": "Ex. Acme Corp",
   "modal.validation.nameMin": "Name must have at least 2 characters.",
   "modal.status.creating": "Creating...",
   "modal.status.saving": "Saving...",
+  "modal.status.deleting": "Deleting...",
   "tooltip.delete": "Delete",
 };
+

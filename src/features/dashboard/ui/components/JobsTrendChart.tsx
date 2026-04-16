@@ -2,13 +2,20 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Line, LineChart, Tooltip, XAxis, YAxis } from "recharts";
-import { Card, Loader } from "@/components/ui";
-import { useI18n } from "@/i18n/I18nProvider";
-import type { JobsTrendPoint } from "../../domain/entities/DashboardSnapshot";
+import { Card, Loader } from "@components/ui";
+import { useI18n } from "@i18n/I18nProvider";
+import type { JobsTrendPoint } from "@features/dashboard/domain/entities/DashboardSnapshot";
 
 type JobsTrendChartProps = {
   points: JobsTrendPoint[];
 };
+
+const chartColors = {
+  axis: "var(--chart-axis)",
+  tooltipBorder: "var(--chart-tooltip-border)",
+  openSeries: "var(--chart-series-open)",
+  completedSeries: "var(--chart-series-completed)",
+} as const;
 
 export function JobsTrendChart({ points }: JobsTrendChartProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -34,24 +41,24 @@ export function JobsTrendChart({ points }: JobsTrendChartProps) {
 
   return (
     <Card className="min-h-72">
-      <p className="text-sm font-semibold text-zinc-800">{t("dashboard.chart.title")}</p>
-      <p className="mt-1 text-sm text-zinc-600">{t("dashboard.chart.description")}</p>
+      <p className="text-sm font-semibold text-neutral-800">{t("dashboard.chart.title")}</p>
+      <p className="mt-1 text-sm text-neutral-600">{t("dashboard.chart.description")}</p>
       <div ref={containerRef} className="mt-4 h-56 min-h-56 w-full min-w-0">
         {chartWidth > 0 ? (
           <LineChart width={Math.max(chartWidth, 200)} height={224} data={points}>
-            <XAxis dataKey="label" stroke="#71717a" fontSize={12} tickLine={false} axisLine={false} />
-            <YAxis stroke="#71717a" fontSize={12} tickLine={false} axisLine={false} width={30} />
+            <XAxis dataKey="label" stroke={chartColors.axis} fontSize={12} tickLine={false} axisLine={false} />
+            <YAxis stroke={chartColors.axis} fontSize={12} tickLine={false} axisLine={false} width={30} />
             <Tooltip
               contentStyle={{
                 borderRadius: "12px",
-                borderColor: "#e4e4e7",
+                borderColor: chartColors.tooltipBorder,
                 fontSize: "12px",
               }}
             />
             <Line
               type="monotone"
               dataKey="open"
-              stroke="#f59e0b"
+              stroke={chartColors.openSeries}
               strokeWidth={2}
               dot={false}
               name={t("dashboard.chart.openSeries")}
@@ -59,7 +66,7 @@ export function JobsTrendChart({ points }: JobsTrendChartProps) {
             <Line
               type="monotone"
               dataKey="completed"
-              stroke="#06b6d4"
+              stroke={chartColors.completedSeries}
               strokeWidth={2}
               dot={false}
               name={t("dashboard.chart.completedSeries")}
@@ -72,3 +79,6 @@ export function JobsTrendChart({ points }: JobsTrendChartProps) {
     </Card>
   );
 }
+
+
+

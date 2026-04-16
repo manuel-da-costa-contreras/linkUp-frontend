@@ -1,4 +1,4 @@
-import type { TranslationNamespace } from "../../types";
+import type { TranslationNamespace } from "@i18n/types";
 
 export const notificationsEs: TranslationNamespace = {
   "errors.load": "No se pudieron cargar las notificaciones.",
@@ -17,3 +17,5 @@ export const notificationsEs: TranslationNamespace = {
   "reasons.required": "campo obligatorio",
   "reasons.unknown": "motivo desconocido",
 };
+
+

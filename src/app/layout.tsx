@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { AuthGate } from "@/components/auth/AuthGate";
+import { AuthGate } from "@components/auth/AuthGate";
 import { Geist, Geist_Mono } from "next/font/google";
-import { ToastProvider } from "@/components/ui";
-import { I18nProvider } from "@/i18n/I18nProvider";
-import { AuthProvider } from "@/lib/auth";
-import { AppQueryProvider } from "@/lib/query/AppQueryProvider";
+import { ToastProvider } from "@components/ui";
+import { I18nProvider } from "@i18n/I18nProvider";
+import { AuthProvider } from "@lib/auth";
+import { AppQueryProvider } from "@lib/query/AppQueryProvider";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -46,3 +46,4 @@ export default function RootLayout({
     </html>
   );
 }
+

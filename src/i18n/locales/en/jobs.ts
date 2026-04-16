@@ -1,11 +1,14 @@
-import type { TranslationNamespace } from "../../types";
+import type { TranslationNamespace } from "@i18n/types";
 
 export const jobsEn: TranslationNamespace = {
   "heading.title": "Jobs",
   "heading.description": "Manage jobs and their operational status.",
+  "search.placeholder": "Search job...",
   "loading": "Loading jobs...",
   "errors.load": "Failed to load jobs.",
   "errors.create": "Failed to create job.",
+  "errors.delete": "Failed to delete job.",
+  "errors.deleteBlocked": "You cannot delete a job in progress.",
   "errors.updateStatus": "Failed to update job status.",
   "errors.jobNotFound": "Job not found (field: {{field}}).",
   "errors.invalidStatusTransition": "Invalid transition for {{field}}. Current status: {{status}}. Reason: {{reason}}.",
@@ -40,6 +43,7 @@ export const jobsEn: TranslationNamespace = {
   "actions.noAction": "No actions",
   "tooltip.start": "Move to In progress",
   "tooltip.changeStatus": "Manage status transition",
+  "tooltip.delete": "Delete",
   "table.column.name": "Name",
   "table.column.assignedTo": "Assigned to",
   "table.column.status": "Status",
@@ -57,6 +61,9 @@ export const jobsEn: TranslationNamespace = {
   "modal.validation.nameMin": "Name must have at least 2 characters.",
   "modal.validation.clientRequired": "You must select a client.",
   "modal.status.creating": "Creating...",
+  "modal.status.deleting": "Deleting...",
+  "modal.delete.title": "Delete job",
+  "modal.delete.description": "The job \"{{name}}\" will be deleted. This action cannot be undone.",
   "modal.defaultStatus": "Job initial status will be Pending.",
   "modal.transition.title": "Update job status",
   "modal.transition.field.nextStatus": "New status",
@@ -74,3 +81,5 @@ export const jobsEn: TranslationNamespace = {
   "modal.transition.status.saving": "Saving...",
   "modal.transition.helper": "Rating is required only when finishing the job."
 };
+
+

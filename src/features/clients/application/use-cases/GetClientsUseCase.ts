@@ -1,6 +1,6 @@
-import type { PaginatedResult, PaginationQuery } from "@/shared/pagination/types";
-import type { Client } from "../../domain/entities/Client";
-import type { ClientRepository, ClientSortBy, SortDir } from "../../domain/repositories/ClientRepository";
+import type { PaginatedResult, PaginationQuery } from "@shared/pagination/types";
+import type { Client } from "@features/clients/domain/entities/Client";
+import type { ClientRepository, ClientSortBy, SortDir } from "@features/clients/domain/repositories/ClientRepository";
 
 export class GetClientsUseCase {
   constructor(private readonly clientRepository: ClientRepository) {}
@@ -12,3 +12,6 @@ export class GetClientsUseCase {
     return this.clientRepository.findAll(orgId, params);
   }
 }
+
+
+

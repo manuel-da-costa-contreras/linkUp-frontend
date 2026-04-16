@@ -1,5 +1,5 @@
-﻿import type { JobAlertNotification } from "../../domain/entities/JobAlertNotification";
-import type { NotificationsRepository } from "../../domain/repositories/NotificationsRepository";
+import type { JobAlertNotification } from "@features/notifications/domain/entities/JobAlertNotification";
+import type { NotificationsRepository } from "@features/notifications/domain/repositories/NotificationsRepository";
 
 export class GetJobAlertsUseCase {
   constructor(private readonly notificationsRepository: NotificationsRepository) {}
@@ -8,3 +8,5 @@ export class GetJobAlertsUseCase {
     return this.notificationsRepository.findJobAlerts(orgId);
   }
 }
+
+

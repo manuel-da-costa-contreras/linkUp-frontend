@@ -1,4 +1,4 @@
-import type { TranslationNamespace } from "../../types";
+import type { TranslationNamespace } from "@i18n/types";
 
 export const commonEn: TranslationNamespace = {
   "actions.cancel": "Cancel",
@@ -14,3 +14,5 @@ export const commonEn: TranslationNamespace = {
   "pagination.pageOf": "Page {{page}} of {{totalPages}}",
   "pagination.total": "Total: {{total}}"
 };
+
+

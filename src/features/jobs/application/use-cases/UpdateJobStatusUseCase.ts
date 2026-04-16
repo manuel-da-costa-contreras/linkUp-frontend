@@ -1,5 +1,5 @@
-import type { Job, JobStatus } from "../../domain/entities/Job";
-import type { JobRepository } from "../../domain/repositories/JobRepository";
+import type { Job, JobStatus } from "@features/jobs/domain/entities/Job";
+import type { JobRepository } from "@features/jobs/domain/repositories/JobRepository";
 
 type UpdateJobStatusPayload = {
   status: JobStatus;
@@ -14,3 +14,5 @@ export class UpdateJobStatusUseCase {
     return this.jobRepository.updateStatus(orgId, jobId, payload);
   }
 }
+
+

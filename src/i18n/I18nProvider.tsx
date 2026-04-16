@@ -1,9 +1,9 @@
 "use client";
 
 import { createContext, ReactNode, useContext, useEffect, useMemo, useState } from "react";
-import { DEFAULT_LOCALE, I18N_STORAGE_KEY, SUPPORTED_LOCALES } from "./config";
-import { dictionaries } from "./dictionary";
-import type { I18nParams, Locale, SupportedLocale } from "./types";
+import { DEFAULT_LOCALE, I18N_STORAGE_KEY, SUPPORTED_LOCALES } from "@i18n/config";
+import { dictionaries } from "@i18n/dictionary";
+import type { I18nParams, Locale, SupportedLocale } from "@i18n/types";
 
 type I18nContextValue = {
   locale: Locale;
@@ -79,3 +79,4 @@ function translate(locale: Locale, key: string, params?: I18nParams) {
     return result.replaceAll(`{{${paramKey}}}`, String(value));
   }, message);
 }
+

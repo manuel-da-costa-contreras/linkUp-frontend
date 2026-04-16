@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@/utils/cn";
+import { cn } from "@utils/cn";
 
 type SortDir = "asc" | "desc";
 
@@ -78,5 +78,6 @@ export function TableSortHeader({ label, active, direction, onToggle, className 
     </button>
   );
 }
+
 
 

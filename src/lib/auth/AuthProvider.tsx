@@ -14,7 +14,7 @@ import {
   signInWithGooglePopup,
   signOutFromFirebase,
   subscribeToIdTokenChanges,
-} from "./firebase";
+} from "@lib/auth/firebase";
 
 type AuthStatus = "loading" | "authenticated" | "unauthenticated";
 
@@ -229,3 +229,5 @@ export function useAuth() {
 
   return context;
 }
+
+

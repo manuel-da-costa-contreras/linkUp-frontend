@@ -1,22 +1,22 @@
-import { authEn } from "./locales/en/auth";
-import { clientsEn } from "./locales/en/clients";
-import { commonEn } from "./locales/en/common";
-import { dashboardEn } from "./locales/en/dashboard";
-import { jobsEn } from "./locales/en/jobs";
-import { navigationEn } from "./locales/en/navigation";
-import { notificationsEn } from "./locales/en/notifications";
-import { userMenuEn } from "./locales/en/user-menu";
-import { usersEn } from "./locales/en/users";
-import { authEs } from "./locales/es/auth";
-import { clientsEs } from "./locales/es/clients";
-import { commonEs } from "./locales/es/common";
-import { dashboardEs } from "./locales/es/dashboard";
-import { jobsEs } from "./locales/es/jobs";
-import { navigationEs } from "./locales/es/navigation";
-import { notificationsEs } from "./locales/es/notifications";
-import { userMenuEs } from "./locales/es/user-menu";
-import { usersEs } from "./locales/es/users";
-import type { Locale, LocaleDictionary } from "./types";
+import { authEn } from "@i18n/locales/en/auth";
+import { clientsEn } from "@i18n/locales/en/clients";
+import { commonEn } from "@i18n/locales/en/common";
+import { dashboardEn } from "@i18n/locales/en/dashboard";
+import { jobsEn } from "@i18n/locales/en/jobs";
+import { navigationEn } from "@i18n/locales/en/navigation";
+import { notificationsEn } from "@i18n/locales/en/notifications";
+import { userMenuEn } from "@i18n/locales/en/user-menu";
+import { usersEn } from "@i18n/locales/en/users";
+import { authEs } from "@i18n/locales/es/auth";
+import { clientsEs } from "@i18n/locales/es/clients";
+import { commonEs } from "@i18n/locales/es/common";
+import { dashboardEs } from "@i18n/locales/es/dashboard";
+import { jobsEs } from "@i18n/locales/es/jobs";
+import { navigationEs } from "@i18n/locales/es/navigation";
+import { notificationsEs } from "@i18n/locales/es/notifications";
+import { userMenuEs } from "@i18n/locales/es/user-menu";
+import { usersEs } from "@i18n/locales/es/users";
+import type { Locale, LocaleDictionary } from "@i18n/types";
 
 export const dictionaries: Record<Locale, LocaleDictionary> = {
   es: {
@@ -42,3 +42,5 @@ export const dictionaries: Record<Locale, LocaleDictionary> = {
     notifications: notificationsEn,
   },
 };
+
+

@@ -1,7 +1,7 @@
 "use client";
 
 import { ChangeEvent } from "react";
-import type { Locale, SupportedLocale } from "@/i18n/types";
+import type { Locale, SupportedLocale } from "@i18n/types";
 
 type LanguageSelectorProps = {
   value: Locale;
@@ -40,3 +40,4 @@ export function LanguageSelector({ value, options, label, onChange }: LanguageSe
     </>
   );
 }
+

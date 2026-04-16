@@ -1,4 +1,4 @@
-import type { TranslationNamespace } from "../../types";
+import type { TranslationNamespace } from "@i18n/types";
 
 export const notificationsEn: TranslationNamespace = {
   "errors.load": "Failed to load notifications.",
@@ -17,3 +17,5 @@ export const notificationsEn: TranslationNamespace = {
   "reasons.required": "required field",
   "reasons.unknown": "unknown reason",
 };
+
+

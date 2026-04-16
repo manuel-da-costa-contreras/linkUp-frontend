@@ -1,4 +1,4 @@
-import type { User, UserRole } from "../../domain/entities/User";
+import type { User, UserRole } from "@features/users/domain/entities/User";
 
 type ApiTimestampObject = {
   _seconds?: number;
@@ -60,3 +60,4 @@ export function mapDomainUserToApi(user: User): Record<string, unknown> {
     role: user.role,
   };
 }
+

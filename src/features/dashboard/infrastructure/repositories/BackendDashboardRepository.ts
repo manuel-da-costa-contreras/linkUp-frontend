@@ -1,7 +1,7 @@
-import { ApiError, apiRequest } from "@/lib/api/httpClient";
-import type { DashboardSnapshot } from "../../domain/entities/DashboardSnapshot";
-import type { DashboardRepository } from "../../domain/repositories/DashboardRepository";
-import { mapDashboardResponseToDomain } from "../mappers/dashboard.mapper";
+import { ApiError, apiRequest } from "@lib/api/httpClient";
+import type { DashboardSnapshot } from "@features/dashboard/domain/entities/DashboardSnapshot";
+import type { DashboardRepository } from "@features/dashboard/domain/repositories/DashboardRepository";
+import { mapDashboardResponseToDomain } from "@features/dashboard/infrastructure/mappers/dashboard.mapper";
 
 export class BackendDashboardRepository implements DashboardRepository {
   async getSnapshot(orgId: string): Promise<DashboardSnapshot> {
@@ -24,3 +24,5 @@ function toObjectPayload(payload: unknown) {
 
   throw new ApiError(500, null, null, "Invalid object payload format.");
 }
+
+

@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { cn } from "@/utils/cn";
+import { cn } from "@utils/cn";
 
 type CardProps = {
   children: ReactNode;
@@ -18,4 +18,5 @@ export function Card({ children, className }: CardProps) {
     </article>
   );
 }
+
 

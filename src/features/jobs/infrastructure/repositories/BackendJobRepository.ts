@@ -1,13 +1,13 @@
-import { ApiError, apiRequest } from "@/lib/api/httpClient";
-import type { PaginatedResult, PaginationMeta, PaginationQuery } from "@/shared/pagination/types";
-import type { Job, JobClientOption, JobStatus } from "../../domain/entities/Job";
-import type { JobRepository, JobSortBy, SortDir } from "../../domain/repositories/JobRepository";
-import { mapJobApiToDomain } from "../mappers/job.mapper";
+import { ApiError, apiRequest } from "@lib/api/httpClient";
+import type { PaginatedResult, PaginationMeta, PaginationQuery } from "@shared/pagination/types";
+import type { Job, JobClientOption, JobStatus } from "@features/jobs/domain/entities/Job";
+import type { JobRepository, JobSortBy, SortDir } from "@features/jobs/domain/repositories/JobRepository";
+import { mapJobApiToDomain } from "@features/jobs/infrastructure/mappers/job.mapper";
 
 export class BackendJobRepository implements JobRepository {
   async findAll(
     orgId: string,
-    params: PaginationQuery & { sortBy: JobSortBy; sortDir: SortDir }
+    params: PaginationQuery & { search: string; sortBy: JobSortBy; sortDir: SortDir }
   ): Promise<PaginatedResult<Job>> {
     const query = new URLSearchParams({
       page: String(params.page),
@@ -15,6 +15,10 @@ export class BackendJobRepository implements JobRepository {
       sortBy: params.sortBy,
       sortDir: params.sortDir,
     });
+
+    if (params.search.trim()) {
+      query.set("search", params.search.trim());
+    }
 
     const payload = await apiRequest<unknown>({
       path: `/organizations/${encodeURIComponent(orgId)}/jobs?${query.toString()}`,
@@ -59,6 +63,13 @@ export class BackendJobRepository implements JobRepository {
 
     return mapJobApiToDomain(toObjectPayload(body));
   }
+
+  async deleteJob(orgId: string, jobId: string): Promise<void> {
+    await apiRequest<void>({
+      path: `/organizations/${encodeURIComponent(orgId)}/jobs/${encodeURIComponent(jobId)}`,
+      method: "DELETE",
+    });
+  }
 }
 
 function toPaginatedJobsPayload(payload: unknown): PaginatedResult<Job> {
@@ -72,8 +83,9 @@ function toPaginatedJobsPayload(payload: unknown): PaginatedResult<Job> {
     const pagination = candidate.pagination && typeof candidate.pagination === "object" ? candidate.pagination : null;
 
     if (data && pagination) {
+      const mappedData = data.map((item) => mapJobApiToDomain(item as Record<string, unknown>));
       return {
-        data: data.map((item) => mapJobApiToDomain(item as Record<string, unknown>)),
+        data: mappedData,
         pagination: normalizePaginationMeta(pagination as Record<string, unknown>),
       };
     }
@@ -143,3 +155,6 @@ function toObjectPayload(payload: unknown) {
 
   throw new ApiError(500, null, null, "Invalid object payload format.");
 }
+
+
+

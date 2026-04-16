@@ -1,4 +1,4 @@
-import type { NotificationsRepository } from "../../domain/repositories/NotificationsRepository";
+import type { NotificationsRepository } from "@features/notifications/domain/repositories/NotificationsRepository";
 
 export class DismissNotificationUseCase {
   constructor(private readonly notificationsRepository: NotificationsRepository) {}
@@ -7,3 +7,5 @@ export class DismissNotificationUseCase {
     return this.notificationsRepository.dismissNotification(orgId, notificationId);
   }
 }
+
+

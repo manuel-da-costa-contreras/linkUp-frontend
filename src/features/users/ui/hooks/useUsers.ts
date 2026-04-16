@@ -2,11 +2,11 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
-import { useI18n } from "@/i18n/I18nProvider";
-import { GetUsersUseCase } from "../../application/use-cases/GetUsersUseCase";
-import { usersQueryKeys } from "../../application/use-cases/queryKeys";
-import type { User } from "../../domain/entities/User";
-import { BackendUserRepository } from "../../infrastructure/repositories/BackendUserRepository";
+import { useI18n } from "@i18n/I18nProvider";
+import { GetUsersUseCase } from "@features/users/application/use-cases/GetUsersUseCase";
+import { usersQueryKeys } from "@features/users/application/use-cases/queryKeys";
+import type { User } from "@features/users/domain/entities/User";
+import { BackendUserRepository } from "@features/users/infrastructure/repositories/BackendUserRepository";
 
 type UseUsersResult = {
   users: User[];
@@ -35,3 +35,5 @@ export function useUsers(): UseUsersResult {
     error: query.error instanceof Error ? query.error.message : t("users.errors.load"),
   };
 }
+
+

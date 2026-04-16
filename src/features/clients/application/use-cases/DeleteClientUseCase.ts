@@ -1,4 +1,4 @@
-import type { ClientRepository } from "../../domain/repositories/ClientRepository";
+import type { ClientRepository } from "@features/clients/domain/repositories/ClientRepository";
 
 export class DeleteClientUseCase {
   constructor(private readonly clientRepository: ClientRepository) {}
@@ -7,3 +7,4 @@ export class DeleteClientUseCase {
     return this.clientRepository.deleteClient(orgId, clientId);
   }
 }
+

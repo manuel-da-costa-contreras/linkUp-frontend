@@ -1,9 +1,9 @@
 "use client";
 
 import { ReactNode, useState } from "react";
-import { DashboardFooter } from "./DashboardFooter";
-import { Sidebar } from "./Sidebar";
-import { TopBar } from "./TopBar";
+import { DashboardFooter } from "@components/ui/dashboard/DashboardFooter";
+import { Sidebar } from "@components/ui/dashboard/Sidebar";
+import { TopBar } from "@components/ui/dashboard/TopBar";
 
 type DashboardShellProps = {
   children: ReactNode;
@@ -25,3 +25,5 @@ export function DashboardShell({ children }: DashboardShellProps) {
     </div>
   );
 }
+
+

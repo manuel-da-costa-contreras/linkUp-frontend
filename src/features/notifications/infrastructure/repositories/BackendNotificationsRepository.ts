@@ -1,6 +1,6 @@
-import { ApiError, apiRequest } from "@/lib/api/httpClient";
-import type { JobAlertNotification, JobAlertStatus } from "../../domain/entities/JobAlertNotification";
-import type { NotificationsRepository } from "../../domain/repositories/NotificationsRepository";
+import { ApiError, apiRequest } from "@lib/api/httpClient";
+import type { JobAlertNotification, JobAlertStatus } from "@features/notifications/domain/entities/JobAlertNotification";
+import type { NotificationsRepository } from "@features/notifications/domain/repositories/NotificationsRepository";
 
 type NotificationApiItem = {
   id?: string;
@@ -82,3 +82,6 @@ function toArrayPayload(payload: unknown) {
 
   throw new ApiError(500, null, null, "Invalid notifications payload format.");
 }
+
+
+

@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { cn } from "@/utils/cn";
+import { cn } from "@utils/cn";
 
 type TooltipProps = {
   content: string;
@@ -30,3 +30,4 @@ export function Tooltip({ content, children, side = "top" }: TooltipProps) {
     </span>
   );
 }
+

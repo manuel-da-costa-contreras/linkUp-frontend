@@ -1,10 +1,8 @@
-export * from "./Card";
-export * from "./LanguageSelector";
-export * from "./Loader";
-export * from "./Modal";
-export * from "./RatingStars";
-export * from "./SectionHeading";
-export * from "./ToastProvider";
-export * from "./Tooltip";
-export * from "./table";
-export * from "./dashboard";
+export * from "@components/ui/layout";
+export * from "@components/ui/forms";
+export * from "@components/ui/feedback";
+export * from "@components/ui/overlay";
+export * from "@components/ui/table";
+export * from "@components/ui/dashboard";
+
+

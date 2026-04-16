@@ -1,4 +1,4 @@
-import type { TranslationNamespace } from "../../types";
+import type { TranslationNamespace } from "@i18n/types";
 
 export const userMenuEn: TranslationNamespace = {
   "title.account": "Account",
@@ -12,3 +12,5 @@ export const userMenuEn: TranslationNamespace = {
   "action.logout": "Sign out",
   "action.loggingOut": "Signing out...",
 };
+
+

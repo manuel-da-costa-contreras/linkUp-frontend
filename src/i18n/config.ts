@@ -1,4 +1,4 @@
-import type { SupportedLocale } from "./types";
+import type { SupportedLocale } from "@i18n/types";
 
 export const I18N_STORAGE_KEY = "app-locale";
 
@@ -8,3 +8,4 @@ export const SUPPORTED_LOCALES: SupportedLocale[] = [
 ];
 
 export const DEFAULT_LOCALE = "es" as const;
+

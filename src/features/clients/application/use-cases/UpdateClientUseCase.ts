@@ -1,5 +1,5 @@
-import type { Client } from "../../domain/entities/Client";
-import type { ClientRepository } from "../../domain/repositories/ClientRepository";
+import type { Client } from "@features/clients/domain/entities/Client";
+import type { ClientRepository } from "@features/clients/domain/repositories/ClientRepository";
 
 export class UpdateClientUseCase {
   constructor(private readonly clientRepository: ClientRepository) {}
@@ -8,3 +8,4 @@ export class UpdateClientUseCase {
     return this.clientRepository.update(orgId, clientId, name);
   }
 }
+

@@ -2,15 +2,15 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMemo } from "react";
-import { useI18n } from "@/i18n/I18nProvider";
-import { ApiError } from "@/lib/api/httpClient";
-import { DismissAllNotificationsUseCase } from "../../application/use-cases/DismissAllNotificationsUseCase";
-import { DismissNotificationUseCase } from "../../application/use-cases/DismissNotificationUseCase";
-import { GetJobAlertsUseCase } from "../../application/use-cases/GetJobAlertsUseCase";
-import { notificationsQueryKeys } from "../../application/use-cases/queryKeys";
-import type { JobAlertNotification } from "../../domain/entities/JobAlertNotification";
-import { BackendNotificationsRepository } from "../../infrastructure/repositories/BackendNotificationsRepository";
-import { useNotificationsStream } from "./useNotificationsStream";
+import { useI18n } from "@i18n/I18nProvider";
+import { ApiError } from "@lib/api/httpClient";
+import { DismissAllNotificationsUseCase } from "@features/notifications/application/use-cases/DismissAllNotificationsUseCase";
+import { DismissNotificationUseCase } from "@features/notifications/application/use-cases/DismissNotificationUseCase";
+import { GetJobAlertsUseCase } from "@features/notifications/application/use-cases/GetJobAlertsUseCase";
+import { notificationsQueryKeys } from "@features/notifications/application/use-cases/queryKeys";
+import type { JobAlertNotification } from "@features/notifications/domain/entities/JobAlertNotification";
+import { BackendNotificationsRepository } from "@features/notifications/infrastructure/repositories/BackendNotificationsRepository";
+import { useNotificationsStream } from "@features/notifications/ui/hooks/useNotificationsStream";
 
 type UseNotificationsResult = {
   notifications: JobAlertNotification[];
@@ -139,3 +139,6 @@ function buildErrorParams(
 
   return { field, reason };
 }
+
+
+

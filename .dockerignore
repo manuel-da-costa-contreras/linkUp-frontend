@@ -1,0 +1,15 @@
+.git
+.github
+.next
+node_modules
+coverage
+cypress/videos
+cypress/screenshots
+cypress/downloads
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.DS_Store
+*.tsbuildinfo
+.env.local
+.env.e2e

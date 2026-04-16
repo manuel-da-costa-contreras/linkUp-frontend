@@ -1,8 +1,8 @@
 "use client";
 
-import { DashboardShell } from "@/components/ui";
-import { ClientsTable } from "@/features/clients";
-import { useAuth } from "@/lib/auth";
+import { DashboardShell } from "@components/ui";
+import { ClientsTable } from "@features/clients";
+import { useAuth } from "@lib/auth";
 
 export default function ClientsPage() {
   const { user } = useAuth();
@@ -14,3 +14,4 @@ export default function ClientsPage() {
     </DashboardShell>
   );
 }
+

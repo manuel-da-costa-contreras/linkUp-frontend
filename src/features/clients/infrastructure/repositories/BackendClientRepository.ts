@@ -1,8 +1,8 @@
-import { ApiError, apiRequest } from "@/lib/api/httpClient";
-import type { PaginatedResult, PaginationMeta, PaginationQuery } from "@/shared/pagination/types";
-import type { Client } from "../../domain/entities/Client";
-import type { ClientRepository, ClientSortBy, SortDir } from "../../domain/repositories/ClientRepository";
-import { mapClientApiToDomain } from "../mappers/client.mapper";
+import { ApiError, apiRequest } from "@lib/api/httpClient";
+import type { PaginatedResult, PaginationMeta, PaginationQuery } from "@shared/pagination/types";
+import type { Client } from "@features/clients/domain/entities/Client";
+import type { ClientRepository, ClientSortBy, SortDir } from "@features/clients/domain/repositories/ClientRepository";
+import { mapClientApiToDomain } from "@features/clients/infrastructure/mappers/client.mapper";
 
 export class BackendClientRepository implements ClientRepository {
   async findAll(
@@ -137,3 +137,6 @@ function toObjectPayload(payload: unknown) {
 
   throw new ApiError(500, null, null, "Invalid object payload format.");
 }
+
+
+

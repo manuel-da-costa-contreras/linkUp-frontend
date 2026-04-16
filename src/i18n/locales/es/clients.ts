@@ -1,4 +1,4 @@
-import type { TranslationNamespace } from "../../types";
+import type { TranslationNamespace } from "@i18n/types";
 
 export const clientsEs: TranslationNamespace = {
   "heading.title": "Clients",
@@ -13,6 +13,7 @@ export const clientsEs: TranslationNamespace = {
   "errors.clientNameExists": "Ya existe un cliente con el campo '{{field}}' en esta organizacion.",
   "errors.clientNotFound": "No se encontro cliente por '{{field}}'.",
   "errors.clientDeleteBlocked": "No se puede eliminar el cliente por '{{reason}}'.",
+  "errors.clientDeleteReassignFailed": "No se pudo reasignar los jobs del cliente antes de eliminar.",
   "errors.validation": "Hay datos invalidos en el campo '{{field}}'.",
   "fields.name": "nombre",
   "fields.clientId": "identificador de cliente",
@@ -27,10 +28,16 @@ export const clientsEs: TranslationNamespace = {
   "table.empty": "No hay clientes para mostrar.",
   "modal.create.title": "Anadir cliente",
   "modal.edit.title": "Editar cliente",
+  "modal.delete.title": "Eliminar cliente",
+  "modal.delete.description": "Se eliminara '{{name}}'.",
+  "modal.delete.withJobs": "Tiene {{total}} jobs asociados. Al eliminarlo, esos jobs quedaran sin cliente y en estado Pendiente.",
+  "modal.delete.withoutJobs": "Este cliente no tiene jobs asociados.",
   "modal.field.name": "Nombre",
   "modal.field.placeholder": "Ej. Acme Corp",
   "modal.validation.nameMin": "El nombre debe tener al menos 2 caracteres.",
   "modal.status.creating": "Creando...",
   "modal.status.saving": "Guardando...",
+  "modal.status.deleting": "Eliminando...",
   "tooltip.delete": "Eliminar",
 };
+

@@ -1,5 +1,5 @@
-import type { PaginatedResult, PaginationQuery } from "@/shared/pagination/types";
-import type { Client } from "../entities/Client";
+import type { PaginatedResult, PaginationQuery } from "@shared/pagination/types";
+import type { Client } from "@features/clients/domain/entities/Client";
 
 export type ClientSortBy =
   | "name"
@@ -20,3 +20,6 @@ export interface ClientRepository {
   update(orgId: string, clientId: string, name: string): Promise<Client>;
   deleteClient(orgId: string, clientId: string): Promise<void>;
 }
+
+
+

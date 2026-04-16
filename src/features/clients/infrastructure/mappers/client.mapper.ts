@@ -1,4 +1,4 @@
-import type { Client } from "../../domain/entities/Client";
+import type { Client } from "@features/clients/domain/entities/Client";
 
 type ClientApiItem = {
   id?: string;
@@ -21,3 +21,4 @@ export function mapClientApiToDomain(source: Record<string, unknown>): Client {
     completedJobs: Number.isFinite(item.completedJobs) ? Number(item.completedJobs) : 0,
   };
 }
+

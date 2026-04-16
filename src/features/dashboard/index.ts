@@ -1,1 +1,2 @@
-export * from "./ui/components/DashboardOverview";
+export * from "@features/dashboard/ui/components/DashboardOverview";
+

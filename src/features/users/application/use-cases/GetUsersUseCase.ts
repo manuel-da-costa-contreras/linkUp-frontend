@@ -1,5 +1,5 @@
-import type { User } from "../../domain/entities/User";
-import type { UserRepository } from "../../domain/repositories/UserRepository";
+import type { User } from "@features/users/domain/entities/User";
+import type { UserRepository } from "@features/users/domain/repositories/UserRepository";
 
 export class GetUsersUseCase {
   constructor(private readonly userRepository: UserRepository) {}
@@ -8,3 +8,5 @@ export class GetUsersUseCase {
     return this.userRepository.findAll();
   }
 }
+
+

@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useI18n } from "@/i18n/I18nProvider";
-import { cn } from "@/utils/cn";
+import { useI18n } from "@i18n/I18nProvider";
+import { cn } from "@utils/cn";
 
 type SidebarProps = {
   mobileOpen: boolean;
@@ -130,3 +130,4 @@ function JobsIcon() {
     </svg>
   );
 }
+

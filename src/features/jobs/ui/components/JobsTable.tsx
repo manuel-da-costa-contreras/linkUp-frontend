@@ -1,13 +1,13 @@
 "use client";
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
-import { Card, Loader, Modal, SectionHeading, TablePagination, TableSortHeader, Tooltip, useToast } from "@/components/ui";
-import { useI18n } from "@/i18n/I18nProvider";
-import { useAuth } from "@/lib/auth";
-import type { JobStatus } from "../../domain/entities/Job";
-import type { JobSortBy } from "../../domain/repositories/JobRepository";
-import { useJobs } from "../hooks/useJobs";
-import { JobStatusTransitionModal } from "./JobStatusTransitionModal";
+import { Card, Loader, Modal, SectionHeading, TablePagination, TableSortHeader, Tooltip, useToast } from "@components/ui";
+import { useI18n } from "@i18n/I18nProvider";
+import { useAuth } from "@lib/auth";
+import type { Job, JobStatus } from "@features/jobs/domain/entities/Job";
+import type { JobSortBy } from "@features/jobs/domain/repositories/JobRepository";
+import { useJobs } from "@features/jobs/ui/hooks/useJobs";
+import { JobStatusTransitionModal } from "@features/jobs/ui/components/JobStatusTransitionModal";
 
 type JobsTableProps = {
   orgId: string;
@@ -18,6 +18,8 @@ export function JobsTable({ orgId }: JobsTableProps) {
   const { showToast } = useToast();
   const { canCreateJobs, canUpdateJobStatus } = useAuth();
   const {
+    search,
+    setSearch,
     jobs,
     clientOptions,
     sortBy,
@@ -32,6 +34,9 @@ export function JobsTable({ orgId }: JobsTableProps) {
     creating,
     createError,
     createJob,
+    deletingJobId,
+    deleteError,
+    deleteJob,
     statusUpdateJobId,
     statusUpdateError,
     statusUpdateSuccess,
@@ -41,6 +46,8 @@ export function JobsTable({ orgId }: JobsTableProps) {
 
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [transitionModalJobId, setTransitionModalJobId] = useState<string | null>(null);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [deleteTargetJob, setDeleteTargetJob] = useState<Job | null>(null);
   const [jobName, setJobName] = useState("");
   const [clientId, setClientId] = useState("");
   const [nameError, setNameError] = useState<string | null>(null);
@@ -100,6 +107,31 @@ export function JobsTable({ orgId }: JobsTableProps) {
     }
   }
 
+  function openDeleteModal(job: Job) {
+    setDeleteTargetJob(job);
+    setDeleteModalOpen(true);
+  }
+
+  function closeDeleteModal() {
+    if (deleteTargetJob && deletingJobId === deleteTargetJob.id) {
+      return;
+    }
+
+    setDeleteModalOpen(false);
+    setDeleteTargetJob(null);
+  }
+
+  async function handleConfirmDelete() {
+    if (!deleteTargetJob) {
+      return;
+    }
+
+    const ok = await deleteJob(deleteTargetJob.id);
+    if (ok) {
+      closeDeleteModal();
+    }
+  }
+
   function renderSortHeader(label: string, field: JobSortBy) {
     return (
       <TableSortHeader
@@ -118,7 +150,16 @@ export function JobsTable({ orgId }: JobsTableProps) {
       <SectionHeading title={t("jobs.heading.title")} description={t("jobs.heading.description")} />
 
       <Card className="space-y-4">
-        <div className="flex justify-end">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="w-full sm:max-w-sm">
+            <input
+              id="job-search-input"
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
+              placeholder={t("jobs.search.placeholder")}
+              className="h-10 w-full rounded-lg border border-neutral-200 bg-white px-3 text-sm text-neutral-800 outline-none transition-colors focus:border-primary-500 focus-visible:ring-2 focus-visible:ring-primary-200"
+            />
+          </div>
           <button
             type="button"
             onClick={openCreateModal}
@@ -136,7 +177,7 @@ export function JobsTable({ orgId }: JobsTableProps) {
           <p className="text-sm text-red-700">{error}</p>
         ) : (
           <>
-            <div className="overflow-x-auto">
+            <div className="relative overflow-x-auto">
               <table className="w-full border-collapse text-sm">
                 <thead>
                   <tr className="border-b border-neutral-200 text-left text-neutral-500">
@@ -145,45 +186,78 @@ export function JobsTable({ orgId }: JobsTableProps) {
                       {renderSortHeader(t("jobs.table.column.assignedTo"), "clientName")}
                     </th>
                     <th className="py-3 px-3 font-medium">{renderSortHeader(t("jobs.table.column.status"), "status")}</th>
-                    <th className="w-16 py-3 pl-3 text-right font-medium">
+                    <th className="w-24 py-3 pl-3 text-right font-medium">
                       <span className="sr-only">{t("jobs.table.column.actions")}</span>
                     </th>
                   </tr>
                 </thead>
                 <tbody>
-                  {jobs.map((job) => (
-                    <tr key={job.id} className="border-b border-neutral-100 text-neutral-700 last:border-b-0">
+                  {jobs.map((job, index) => (
+                    <tr key={job.id || `job-row-${index}`} className="border-b border-neutral-100 text-neutral-700 last:border-b-0">
                       <td className="py-3 pr-3 font-medium text-neutral-900">{job.name}</td>
                       <td className="py-3 px-3">{job.clientName}</td>
                       <td className="py-3 px-3">
                         <StatusBadge status={job.status} />
                       </td>
                       <td className="py-3 pl-3 text-right">
-                        {job.status === "PENDING" || job.status === "IN_PROGRESS" ? (
-                          <Tooltip content={t("jobs.tooltip.changeStatus")} side="left">
-                            <button
-                              type="button"
-                              disabled={statusUpdateJobId === job.id || !canUpdateJobStatus}
-                              onClick={() => {
-                                clearStatusUpdateFeedback();
-                                setTransitionModalJobId(job.id);
-                              }}
-                              title={
-                                !canUpdateJobStatus ? t("auth.errors.forbiddenMutation") : t("jobs.tooltip.changeStatus")
-                              }
-                              className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-neutral-200 bg-white text-neutral-600 transition-colors hover:bg-neutral-100 hover:text-neutral-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200 disabled:cursor-not-allowed disabled:border-neutral-200 disabled:bg-neutral-100 disabled:text-neutral-400"
-                              aria-label={t("jobs.actions.changeStatus")}
-                            >
-                              {job.status === "PENDING" ? (
-                                <svg
-                                  aria-hidden="true"
-                                  viewBox="0 0 24 24"
-                                  className="h-4 w-4"
-                                  fill="currentColor"
-                                >
-                                  <path d="M8 5.14v13.72a1 1 0 0 0 1.53.85l10.6-6.86a1 1 0 0 0 0-1.68L9.53 4.29A1 1 0 0 0 8 5.14Z" />
-                                </svg>
-                              ) : (
+                        <div className="inline-flex items-center justify-end gap-2">
+                          {job.status === "PENDING" || job.status === "IN_PROGRESS" ? (
+                            <Tooltip content={t("jobs.tooltip.changeStatus")} side="left">
+                              <button
+                                type="button"
+                                disabled={statusUpdateJobId === job.id || !canUpdateJobStatus || !job.id}
+                                onClick={() => {
+                                  clearStatusUpdateFeedback();
+                                  setTransitionModalJobId(job.id);
+                                }}
+                                data-testid="job-row-change-status"
+                                title={
+                                  !canUpdateJobStatus ? t("auth.errors.forbiddenMutation") : t("jobs.tooltip.changeStatus")
+                                }
+                                className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-neutral-200 bg-white text-neutral-600 transition-colors hover:bg-neutral-100 hover:text-neutral-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200 disabled:cursor-not-allowed disabled:border-neutral-200 disabled:bg-neutral-100 disabled:text-neutral-400"
+                                aria-label={t("jobs.actions.changeStatus")}
+                              >
+                                {job.status === "PENDING" ? (
+                                  <svg
+                                    aria-hidden="true"
+                                    viewBox="0 0 24 24"
+                                    className="h-4 w-4"
+                                    fill="currentColor"
+                                  >
+                                    <path d="M8 5.14v13.72a1 1 0 0 0 1.53.85l10.6-6.86a1 1 0 0 0 0-1.68L9.53 4.29A1 1 0 0 0 8 5.14Z" />
+                                  </svg>
+                                ) : (
+                                  <svg
+                                    aria-hidden="true"
+                                    viewBox="0 0 24 24"
+                                    className="h-4 w-4"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                  >
+                                    <path d="M3 12a9 9 0 0 1 15.55-6.36" />
+                                    <path d="M21 3v6h-6" />
+                                    <path d="M21 12a9 9 0 0 1-15.55 6.36" />
+                                    <path d="M3 21v-6h6" />
+                                  </svg>
+                                )}
+                              </button>
+                            </Tooltip>
+                          ) : null}
+
+                          {job.status !== "IN_PROGRESS" ? (
+                            <Tooltip content={t("jobs.tooltip.delete")} side="left">
+                              <button
+                                type="button"
+                                onClick={() => openDeleteModal(job)}
+                                data-testid="job-row-delete"
+                                disabled={deletingJobId === job.id || !canUpdateJobStatus || !job.id}
+                                title={!canUpdateJobStatus ? t("auth.errors.forbiddenMutation") : t("jobs.tooltip.delete")}
+                                className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-neutral-500 transition-colors hover:bg-red-50 hover:text-red-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200 disabled:cursor-not-allowed disabled:bg-neutral-100 disabled:text-neutral-400"
+                                aria-label={t("jobs.tooltip.delete")}
+                              >
                                 <svg
                                   aria-hidden="true"
                                   viewBox="0 0 24 24"
@@ -194,15 +268,16 @@ export function JobsTable({ orgId }: JobsTableProps) {
                                   strokeLinecap="round"
                                   strokeLinejoin="round"
                                 >
-                                  <path d="M3 12a9 9 0 0 1 15.55-6.36" />
-                                  <path d="M21 3v6h-6" />
-                                  <path d="M21 12a9 9 0 0 1-15.55 6.36" />
-                                  <path d="M3 21v-6h6" />
+                                  <path d="M3 6h18" />
+                                  <path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2" />
+                                  <path d="M19 6l-1 14a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1L5 6" />
+                                  <path d="M10 11v6" />
+                                  <path d="M14 11v6" />
                                 </svg>
-                              )}
-                            </button>
-                          </Tooltip>
-                        ) : null}
+                              </button>
+                            </Tooltip>
+                          ) : null}
+                        </div>
                       </td>
                     </tr>
                   ))}
@@ -210,6 +285,13 @@ export function JobsTable({ orgId }: JobsTableProps) {
               </table>
 
               {jobs.length === 0 ? <p className="py-4 text-sm text-neutral-500">{t("jobs.table.empty")}</p> : null}
+              {deleteError ? <p className="pt-2 text-xs text-red-700">{deleteError}</p> : null}
+
+              {deletingJobId ? (
+                <div className="absolute inset-0 z-10 grid place-items-center rounded-xl bg-white/70 backdrop-blur-[2px]">
+                  <Loader centered label={t("jobs.modal.status.deleting")} />
+                </div>
+              ) : null}
             </div>
 
             <TablePagination
@@ -316,6 +398,39 @@ export function JobsTable({ orgId }: JobsTableProps) {
           return transitionJobStatus(transitionTarget.id, payload);
         }}
       />
+
+      <Modal
+        open={deleteModalOpen}
+        title={t("jobs.modal.delete.title")}
+        onClose={closeDeleteModal}
+        testId="job-delete-modal"
+        footer={
+          <>
+            <button
+              type="button"
+              onClick={closeDeleteModal}
+              className="rounded-lg border border-neutral-200 px-4 py-2 text-sm font-medium text-neutral-700 transition-colors hover:bg-neutral-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200"
+            >
+              {t("common.actions.cancel")}
+            </button>
+            <button
+              type="button"
+              onClick={() => void handleConfirmDelete()}
+              data-testid="job-delete-confirm"
+              disabled={!deleteTargetJob || deletingJobId === deleteTargetJob?.id}
+              className="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-red-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {deleteTargetJob && deletingJobId === deleteTargetJob.id
+                ? t("jobs.modal.status.deleting")
+                : t("common.actions.delete")}
+            </button>
+          </>
+        }
+      >
+        {deleteTargetJob ? (
+          <p className="text-sm text-neutral-700">{t("jobs.modal.delete.description", { name: deleteTargetJob.name })}</p>
+        ) : null}
+      </Modal>
     </div>
   );
 }
@@ -339,5 +454,8 @@ function StatusBadge({ status }: { status: JobStatus }) {
 
   return <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${styleMap[status]}`}>{labelMap[status]}</span>;
 }
+
+
+
 
 

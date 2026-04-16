@@ -1,7 +1,9 @@
-﻿export * from "./application/use-cases/GetUsersUseCase";
-export * from "./domain/entities/User";
-export * from "./domain/repositories/UserRepository";
-export * from "./infrastructure/repositories/BackendUserRepository";
-export * from "./ui/components/UsersList";
-export * from "./ui/hooks/useUsers";
+export * from "@features/users/application/use-cases/GetUsersUseCase";
+export * from "@features/users/domain/entities/User";
+export * from "@features/users/domain/repositories/UserRepository";
+export * from "@features/users/infrastructure/repositories/BackendUserRepository";
+export * from "@features/users/ui/components/UsersList";
+export * from "@features/users/ui/hooks/useUsers";
+
+
 

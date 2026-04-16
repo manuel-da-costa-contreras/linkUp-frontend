@@ -1,5 +1,5 @@
-import type { DashboardSnapshot } from "../../domain/entities/DashboardSnapshot";
-import type { DashboardRepository } from "../../domain/repositories/DashboardRepository";
+import type { DashboardSnapshot } from "@features/dashboard/domain/entities/DashboardSnapshot";
+import type { DashboardRepository } from "@features/dashboard/domain/repositories/DashboardRepository";
 
 export class GetDashboardSnapshotUseCase {
   constructor(private readonly dashboardRepository: DashboardRepository) {}
@@ -8,3 +8,4 @@ export class GetDashboardSnapshotUseCase {
     return this.dashboardRepository.getSnapshot(orgId);
   }
 }
+

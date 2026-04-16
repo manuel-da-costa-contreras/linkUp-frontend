@@ -1,4 +1,4 @@
-import type { TranslationNamespace } from "../../types";
+import type { TranslationNamespace } from "@i18n/types";
 
 export const dashboardEs: TranslationNamespace = {
   "loading": "Cargando dashboard...",
@@ -20,3 +20,4 @@ export const dashboardEs: TranslationNamespace = {
   "lastUpdate.empty": "Sin fecha de actualizacion",
   "lastUpdate.label": "Actualizado: {{value}}",
 };
+

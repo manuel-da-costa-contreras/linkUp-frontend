@@ -1,5 +1,5 @@
-import { Card } from "@/components/ui";
-import { cn } from "@/utils/cn";
+import { Card } from "@components/ui";
+import { cn } from "@utils/cn";
 
 type MetricCardProps = {
   label: string;
@@ -20,8 +20,8 @@ export function MetricCard({
 
   return (
     <Card className="space-y-1">
-      <p className="text-xs uppercase tracking-[0.14em] text-zinc-500">{label}</p>
-      <p className="text-2xl font-semibold text-zinc-900">{value}</p>
+      <p className="text-xs uppercase tracking-[0.14em] text-neutral-500">{label}</p>
+      <p className="text-2xl font-semibold text-neutral-900">{value}</p>
       <p
         className={cn(
           "text-sm",
@@ -38,3 +38,4 @@ export function MetricCard({
     </Card>
   );
 }
+

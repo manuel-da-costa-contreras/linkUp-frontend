@@ -1,11 +1,14 @@
-import type { TranslationNamespace } from "../../types";
+import type { TranslationNamespace } from "@i18n/types";
 
 export const jobsEs: TranslationNamespace = {
   "heading.title": "Jobs",
   "heading.description": "Gestiona trabajos y su estado operativo.",
+  "search.placeholder": "Buscar job...",
   "loading": "Cargando jobs...",
   "errors.load": "No se pudieron cargar los jobs.",
   "errors.create": "No se pudo crear el job.",
+  "errors.delete": "No se pudo eliminar el job.",
+  "errors.deleteBlocked": "No se puede eliminar un job en curso.",
   "errors.updateStatus": "No se pudo actualizar el estado del job.",
   "errors.jobNotFound": "No se encontro el job (campo: {{field}}).",
   "errors.invalidStatusTransition": "Transicion invalida para {{field}}. Estado actual: {{status}}. Motivo: {{reason}}.",
@@ -40,6 +43,7 @@ export const jobsEs: TranslationNamespace = {
   "actions.noAction": "Sin acciones",
   "tooltip.start": "Cambiar a En curso",
   "tooltip.changeStatus": "Gestionar transicion de estado",
+  "tooltip.delete": "Eliminar",
   "table.column.name": "Nombre",
   "table.column.assignedTo": "Asignado a",
   "table.column.status": "Estado",
@@ -57,6 +61,9 @@ export const jobsEs: TranslationNamespace = {
   "modal.validation.nameMin": "El nombre debe tener al menos 2 caracteres.",
   "modal.validation.clientRequired": "Debes seleccionar un cliente.",
   "modal.status.creating": "Creando...",
+  "modal.status.deleting": "Eliminando...",
+  "modal.delete.title": "Eliminar job",
+  "modal.delete.description": "Se eliminara el job \"{{name}}\". Esta accion no se puede deshacer.",
   "modal.defaultStatus": "El estado inicial del job sera Pendiente.",
   "modal.transition.title": "Actualizar estado del job",
   "modal.transition.field.nextStatus": "Nuevo estado",
@@ -74,3 +81,5 @@ export const jobsEs: TranslationNamespace = {
   "modal.transition.status.saving": "Guardando...",
   "modal.transition.helper": "Completar rating es obligatorio solo cuando finalizas el job."
 };
+
+

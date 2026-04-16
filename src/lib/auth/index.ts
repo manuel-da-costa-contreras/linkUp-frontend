@@ -1,2 +1,4 @@
-export * from "./AuthProvider";
-export * from "./firebase";
+export * from "@lib/auth/AuthProvider";
+export * from "@lib/auth/firebase";
+
+
